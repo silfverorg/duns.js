@@ -55,17 +55,17 @@ var StringValidator = {
     validate : function(param) {
         var props = this.props;
         if(_(param).isString() === false) 
-            throw "Not string";
+            throw new Error('Value is not string');
         if(_(props.disallowed).contains(param) && _(props.allowed).contains(param) === false )
-            throw "Blacklisted value ";
+            throw new Error('Value is blacklisted');
         if(props.max && param.length > props.max)
-            throw "Larger than allowed"
+            throw new Error('Argument length is larger than allowed');
         if(props.min && param.length < props.min)
-            throw "Larger than allowed"
+            throw new Error('Argument length is less than allowed');
         if(props.exactLength && param.length !== props.exactLength)
-            throw "Invalid length"
+            throw new Error('Argument has invalid length');
         if(props.useEmail && isEmail(param) === false) 
-            throw "Not RFC822 email"
+            throw new Error('Argument is not valid RFC822 email');
     }
 };
 
@@ -110,17 +110,4 @@ var Duns = {
     }
 };
 
-var TestSchema = Duns.schema({
-    name      : Duns.string().maxlen(10).minlen(5).length(6),
-    email     : Duns.string().email(),
-    something : Duns.string().allow('')
-});
-var testobj  = {
-    name : 'niklas',
-    email : 'silfverstrom@gmail.com',
-    something : ''
-};
-Duns.validate(testobj, TestSchema);
-
-
-
+module.exports = Duns;
