@@ -10,5 +10,17 @@ var testobj  = {
     email : 'silfverstrom@gmail.com',
     something : ''
 };
-Duns.validate(testobj, TestSchema);
+var a = Duns.validate(testobj, TestSchema);
+
+
+var test = { deal : { ninja : 'hej' } };
+var test2 = { deal : { ninja : 100 } };
+var f = Duns.schema({ 
+    deal : Duns.schema({
+        ninja : Duns.string()
+    })
+});
+console.log(Duns.validate(test, f) );
+console.log(Duns.validate(test2, f) );
+
 

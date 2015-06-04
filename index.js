@@ -3,6 +3,20 @@ var _ = require('underscore');
 //RFC822 email validator
 var isEmail = require('./is_email')
 
+var ObjectValidator = {
+    type : 'Duns-object-validator',
+    _clear : function() {
+        this.props = {
+        };
+        return this;
+    },
+    validate : function(param) {
+        if( _(param).isObject() == false)
+            throw new Error('Not object');
+        return true;
+
+    }
+};
 var StringValidator = {
     type : 'Duns-string-validator',
     _clear : function() {
@@ -66,12 +80,14 @@ var StringValidator = {
             throw new Error('Argument has invalid length');
         if(props.useEmail && isEmail(param) === false) 
             throw new Error('Argument is not valid RFC822 email');
+            return true;
     }
 };
 
 var DunsString = {
 };
 var DunsSchema = {
+    type : 'duns-schema',
     init : function() {
         this.val = {};
     },
@@ -100,14 +116,69 @@ var Duns = {
         var svalidator = Object.create(StringValidator)._clear();
         return svalidator;
     },
+    object : function() {
+        var svalidator = Object.create(ObjectValidator)._clear();
+        return svalidator;
+    },
     validate : function(object, schema) {
-        _(object).keys().map(function(key) {
-            var skey =  schema.get(key);
-            if(skey && skey.type === 'Duns-string-validator') {
-                skey.validate(object[key]);
+        var ok = true;
+        if( _(object).isObject() ) {
+            _(object).keys().map(function(key) {
+                var skey =  schema.get(key);
+                if(skey && skey.type === 'Duns-string-validator') {
+                    try { 
+                        skey.validate(object[key]);
+                    } catch(err) {
+                        ok = false;
+                    }
+                } else {
+                }
+            });
+        } else {
+            try { 
+                schema.validate(object);
+            } catch(err) {
+                ok = false;
             }
-        });
+        }
+        return ok;
+    },
+    test : function(object,schema) {
+        var oki = true;
+        if(_(object).isObject() ) {
+            _(object).keys().map(function(key) {
+                var s = schema.get(key);
+                if(s.type === 'duns-schema') {
+                    if( !Duns.test(object[key], s) ) {
+                        oki = false;
+                    }
+                } else {
+                    if( !Duns.validate(object[key], s) ) {
+                        oki = false;
+                    }
+                }
+            });
+        }
+        return oki;
     }
 };
+
+var test = { deal : { ninja : 'hej' } };
+var test2 = { 
+    deal : { 
+        ninja : { 
+            pirate : 100   
+        }
+    } 
+};
+var f = Duns.schema({ 
+    deal : Duns.schema({
+        ninja : Duns.schema({
+            pirate : Duns.string().minlen(2)
+        })
+    })
+});
+//console.log(Duns.validate(test, f) );
+console.log(Duns.test(test2, f));
 
 module.exports = Duns;
