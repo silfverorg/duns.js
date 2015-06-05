@@ -1,4 +1,4 @@
-var Duns = require('./index');
+var Duns = require('./src/index');
 
 var TestSchema = Duns.schema({
     name      : Duns.string().maxlen(10).minlen(5).length(6),
