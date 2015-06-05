@@ -25,7 +25,8 @@ var Schema = Duns.object().keys({
 
 Then validate
 ```
-Duns.validate({ { pirate : { ninja : 'test', parrot : 100 } }) //true
+var data = { pirate : { ninja : 'test', parrot : 100 } };
+Duns.validate(data, Schema) //true
 ```
 
 ### Duns.number
@@ -35,7 +36,7 @@ Must be number.
 * greater(gr) - must be greater than gr.
 * less(le)    - must be less than le.
 * positive()  - must be positive( > 0).
-* negative()  - must be negative( > 0).
+* negative()  - must be negative( < 0).
 
 ### Duns.string
 Must be string.
