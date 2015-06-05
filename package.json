@@ -1,0 +1,29 @@
+{
+  "name": "duns",
+  "version": "0.0.1",
+  "description": "Object and schema validator for javascript.",
+  "main": "index.js",
+  "dependencies": {
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/silfverstrom/duns.js.git"
+  },
+  "keywords": [
+    "object",
+    "validation",
+    "js",
+    "schema"
+  ],
+  "author": "Niklas Silfverström",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/silfverstrom/duns.js/issues"
+  },
+  "homepage": "https://github.com/silfverstrom/duns.js"
+}
