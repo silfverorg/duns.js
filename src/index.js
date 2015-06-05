@@ -31,7 +31,8 @@ var Duns = {
         return svalidator;
     },
     array : function() {
-        var svalidator = Object.create(ArrayValidator)._clear();
+        var svalidator = new ArrayValidator();
+        svalidator._clear();
         return svalidator;
     },
     number : function() {
@@ -78,7 +79,7 @@ var Duns = {
         this._clear(); //clear messages
         var that = this;
         var oki = true;
-        if(_(object).isObject() ) {
+        if(_(object).isObject() && _(object).isArray() === false) {
             _(object).keys().map(function(key) {
                 try {
                     var s = schema.get(key);
@@ -96,6 +97,13 @@ var Duns = {
                     oki = false;
                 }
             });
+        } else { 
+            try {
+                oki = schema.validate(object);
+            } catch (err) {
+                that.err = err;
+                oki = false;
+            }
         }
         return oki;
     }
