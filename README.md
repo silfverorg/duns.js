@@ -1,6 +1,7 @@
 # Duns.js
 Duns - schema validator for javascript. 
-version - 0.0.1
+version - 0.0.2
+https://travis-ci.org/silfverstrom/duns.js.svg?branch=master
 
 ## Methods
 
