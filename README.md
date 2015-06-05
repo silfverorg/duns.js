@@ -28,6 +28,9 @@ Then validate
 var data = { pirate : { ninja : 'test', parrot : 100 } };
 Duns.validate(data, Schema) //true
 ```
+### Duns
+* Duns.validate(object,Schema) - validates a object, given a schema. Returns true on success, false otherwise.
+* Duns.error() - returns last error message after validation.
 
 ### Duns.number
 Must be number.
