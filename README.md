@@ -21,12 +21,12 @@ var Schema = Duns.object().keys({
         })
     })
 });
-```a
+```
 
 Then validate
-´´´
+```
 Duns.validate({ { pirate : { ninja : 'test', parrot : 100 } }) //true
-´´´
+```
 
 ### Duns.number
 Must be number.
