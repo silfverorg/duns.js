@@ -1,4 +1,4 @@
-var Duns = require('./src/index');
+var Duns = require('./index');
 
 
 

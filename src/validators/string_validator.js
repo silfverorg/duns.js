@@ -29,10 +29,6 @@ var StringValidator = {
         this.props.useEmail = true;
         return this;
     },
-    minlen : function(min) {
-        this.props.min = min;
-        return this;
-    },
     allow : function(val) {
         if(_(val).isArray() ) {
             this.props.allowed = this.disallowed.concat(val);
