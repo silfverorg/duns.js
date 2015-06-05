@@ -40,7 +40,7 @@ var NumberValidator = {
     },
     validate : function(param) {
         if( _(param).isNumber() == false)
-            throw new Error('Not object');
+            throw new Error('Not number');
         if(this.props.max && param > this.props.max)
             throw new Error('Invalid length');
         if(this.props.min && param < this.props.min)

@@ -8,7 +8,7 @@ var test2 = {
         ninja : {
             pirate : '100',
             num    :  100,
-            lol : 100
+            lol : [10,20,30]
         }
     }
 };
@@ -19,7 +19,8 @@ var f = Duns.object().keys({
             num : Duns.number()
             .max(140).min(90).greater(90)
             .positive(),
-            lol : Duns.number()
+            lol : Duns.array().min(3).max(3).length(3)
+            .items([Duns.number() ])
         })
     })
 });

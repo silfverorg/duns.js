@@ -4,11 +4,12 @@ version - 0.0.1
 
 ## Methods
 
-Currently supports three validations, 
+Currently supports four validations, 
 
 * Duns.object()
 * Duns.number()
 * Duns.string()
+* Duns.array()
 
 To use, create a schema 
 ```
@@ -49,6 +50,13 @@ Must be string.
 * email(email) - must be RFC822 valid email.
 * allow(val)   - whitelist val.
 * deny(val)    - blacklist val.
+
+### Duns.array
+Must be array
+* items([])      - an array of schemas, one of these must be valid for all items in data.
+* min(min)       - minimum length of array
+* max(max)       - max length of array
+* length(length) - length of array
 
 ### Duns.object
 Must be object.

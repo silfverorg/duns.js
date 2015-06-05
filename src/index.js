@@ -5,6 +5,7 @@ var isEmail = require('./is_email')
 
 var ObjectValidator = require('./validators/object_validator');
 var StringValidator = require('./validators/string_validator');
+var ArrayValidator = require('./validators/array_validator');
 var NumberValidator = require('./validators/number_validator');
 var DunsSchema = require('./duns_schema');
 
@@ -29,6 +30,10 @@ var Duns = {
         var svalidator = Object.create(StringValidator)._clear();
         return svalidator;
     },
+    array : function() {
+        var svalidator = Object.create(ArrayValidator)._clear();
+        return svalidator;
+    },
     number : function() {
         var svalidator = Object.create(NumberValidator)._clear();
         return svalidator;
@@ -40,13 +45,15 @@ var Duns = {
     _validateSingle : function(object, schema) {
         var that = this;
         var ok = true;
-        if( _(object).isObject() ) {
+        if( _(object).isObject() && _(object).isArray() === false) {
             _(object).keys().map(function(key) {
                 try {
                     var skey =  schema.get(key);
                     if(skey && skey.type === 'Duns-string-validator') {
                             skey.validate(object[key]);
                     } else if(skey && skey.type === 'Duns-number-validator') {
+                            skey.validate(object[key]);
+                    } else if(skey && skey.type === 'Duns-array-validator') {
                             skey.validate(object[key]);
                     } 
                 } catch(err) {
