@@ -35,7 +35,7 @@ Must be number.
 * greater(gr) - must be greater than gr.
 * less(le)    - must be less than le.
 * positive()  - must be positive( > 0).
-* negative()  - must be negative( > 0).
+* negative()  - must be negative( < 0).
 
 ### Duns.string
 Must be string.
