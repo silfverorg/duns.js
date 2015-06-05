@@ -9,8 +9,12 @@ var NumberValidator = require('./validators/number_validator');
 var DunsSchema = require('./duns_schema');
 
 var Duns = {
+    err : null, //last error
     o : function(keys) {
         return this.schema(keys);
+    },
+    error : function() {
+        return this.err;
     },
     schema : function(keys) {
         var dschema = Object.create(DunsSchema);
@@ -34,6 +38,7 @@ var Duns = {
         return svalidator;
     },
     _validateSingle : function(object, schema) {
+        var that = this;
         var ok = true;
         if( _(object).isObject() ) {
             _(object).keys().map(function(key) {
@@ -45,6 +50,7 @@ var Duns = {
                             skey.validate(object[key]);
                     } 
                 } catch(err) {
+                    that.err = err;
                     ok = false;
                 }
             });
@@ -52,12 +58,18 @@ var Duns = {
             try {
                 schema.validate(object);
             } catch(err) {
+                that.err = err;
                 ok = false;
             }
         }
         return ok;
     },
+    _clear : function() {
+        this.err = null;
+    },
     validate : function(object,schema) {
+        this._clear(); //clear messages
+        var that = this;
         var oki = true;
         if(_(object).isObject() ) {
             _(object).keys().map(function(key) {
@@ -73,6 +85,7 @@ var Duns = {
                         }
                     }
                 } catch (err) {
+                    that.err = err;
                     oki = false;
                 }
             });
@@ -80,6 +93,5 @@ var Duns = {
         return oki;
     }
 };
-
 
 module.exports = Duns;

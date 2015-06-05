@@ -19,8 +19,10 @@ var f = Duns.object().keys({
             num : Duns.number()
             .max(140).min(90).greater(90)
             .positive(),
+            lol : Duns.number()
         })
     })
 });
 
 console.log(Duns.validate(test2, f) );
+console.log(Duns.error() );
