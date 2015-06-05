@@ -37,20 +37,16 @@ var Duns = {
         var ok = true;
         if( _(object).isObject() ) {
             _(object).keys().map(function(key) {
-                var skey =  schema.get(key);
-                if(skey && skey.type === 'Duns-string-validator') {
-                    try {
-                        skey.validate(object[key]);
-                    } catch(err) {
-                        ok = false;
-                    }
-                } else if(skey && skey.type === 'Duns-number-validator') {
-                    try {
-                        skey.validate(object[key]);
-                    } catch(err) {
-                        ok = false;
-                    }
-                } 
+                try {
+                    var skey =  schema.get(key);
+                    if(skey && skey.type === 'Duns-string-validator') {
+                            skey.validate(object[key]);
+                    } else if(skey && skey.type === 'Duns-number-validator') {
+                            skey.validate(object[key]);
+                    } 
+                } catch(err) {
+                    ok = false;
+                }
             });
         } else {
             try {
@@ -65,15 +61,19 @@ var Duns = {
         var oki = true;
         if(_(object).isObject() ) {
             _(object).keys().map(function(key) {
-                var s = schema.get(key);
-                if(s.type === 'duns-schema') {
-                    if( !Duns.validate(object[key], s) ) {
-                        oki = false;
+                try {
+                    var s = schema.get(key);
+                    if(s.type === 'duns-schema') {
+                        if( !Duns.validate(object[key], s) ) {
+                            oki = false;
+                        }
+                    } else {
+                        if( !Duns._validateSingle(object[key], s) ) {
+                            oki = false;
+                        }
                     }
-                } else {
-                    if( !Duns._validateSingle(object[key], s) ) {
-                        oki = false;
-                    }
+                } catch (err) {
+                    oki = false;
                 }
             });
         }

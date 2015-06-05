@@ -7,7 +7,8 @@ var test2 = {
     deal : {
         ninja : {
             pirate : '100',
-            num    :  100
+            num    :  100,
+            lol : 100
         }
     }
 };
