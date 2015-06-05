@@ -1,26 +1,25 @@
 var Duns = require('./src/index');
 
-var TestSchema = Duns.schema({
-    name      : Duns.string().maxlen(10).minlen(5).length(6),
-    email     : Duns.string().email(),
-    something : Duns.string().allow('')
-});
-var testobj  = {
-    name : 'niklas',
-    email : 'silfverstrom@gmail.com',
-    something : ''
+
+
+var test = { deal : { ninja : 100 } };
+var test2 = {
+    deal : {
+        ninja : {
+            pirate : '100',
+            num    :  100
+        }
+    }
 };
-var a = Duns.validate(testobj, TestSchema);
-
-
-var test = { deal : { ninja : 'hej' } };
-var test2 = { deal : { ninja : 100 } };
-var f = Duns.schema({ 
-    deal : Duns.schema({
-        ninja : Duns.string()
+var f = Duns.object().keys({
+    deal : Duns.object().keys({
+        ninja : Duns.object().keys({
+            pirate : Duns.string().minlen(2),
+            num : Duns.number()
+            .max(140).min(90).greater(90)
+            .positive(),
+        })
     })
 });
-console.log(Duns.validate(test, f) );
+
 console.log(Duns.validate(test2, f) );
-
-

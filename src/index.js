@@ -5,23 +5,9 @@ var isEmail = require('./is_email')
 
 var ObjectValidator = require('./validators/object_validator');
 var StringValidator = require('./validators/string_validator');
+var NumberValidator = require('./validators/number_validator');
+var DunsSchema = require('./duns_schema');
 
-var DunsSchema = {
-    type : 'duns-schema',
-    init : function() {
-        this.val = {};
-    },
-    build : function(key,type) {
-        this.val[key] = type;
-    },
-    get : function(key) {
-        var ob = this.val[key];
-        if(ob === undefined) {
-            throw "Not allowed";
-        }
-        return ob;
-    }
-};
 var Duns = {
     o : function(keys) {
         return this.schema(keys);
@@ -39,6 +25,10 @@ var Duns = {
         var svalidator = Object.create(StringValidator)._clear();
         return svalidator;
     },
+    number : function() {
+        var svalidator = Object.create(NumberValidator)._clear();
+        return svalidator;
+    },
     object : function() {
         var svalidator = Object.create(ObjectValidator)._clear();
         return svalidator;
@@ -54,8 +44,13 @@ var Duns = {
                     } catch(err) {
                         ok = false;
                     }
-                } else {
-                }
+                } else if(skey && skey.type === 'Duns-number-validator') {
+                    try {
+                        skey.validate(object[key]);
+                    } catch(err) {
+                        ok = false;
+                    }
+                } 
             });
         } else {
             try {
@@ -86,22 +81,5 @@ var Duns = {
     }
 };
 
-var test = { deal : { ninja : 'hej' } };
-var test2 = {
-    deal : {
-        ninja : {
-            pirate : 'hej'
-        }
-    }
-};
-var f = Duns.schema({
-    deal : Duns.schema({
-        ninja : Duns.schema({
-            pirate : Duns.string().minlen(2)
-        })
-    })
-});
-
-console.log(Duns.validate(test, f) );
 
 module.exports = Duns;
