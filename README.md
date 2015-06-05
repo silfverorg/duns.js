@@ -25,7 +25,8 @@ var Schema = Duns.object().keys({
 
 Then validate
 ```
-Duns.validate({ { pirate : { ninja : 'test', parrot : 100 } }) //true
+var data = { pirate : { ninja : 'test', parrot : 100 } };
+Duns.validate(data, Schema) //true
 ```
 
 ### Duns.number
