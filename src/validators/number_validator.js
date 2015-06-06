@@ -1,16 +1,19 @@
 var _ = require('underscore');
 var DunsSchema = require('../duns_schema');
+var NumberExtension = {};
 
 var NumberValidator = {
     type : 'Duns-object-validator',
+    extension : NumberExtension,
     _clear : function() {
         this.props = {
-            max : null,
-            min : null,
-            greater : null,
-            less : null,
-            positive : null,
-            negative : null,
+            extension : {},
+            max       : null,
+            min       : null,
+            greater   : null,
+            less      : null,
+            positive  : null,
+            negative  : null
         };
         return this;
     },
@@ -38,7 +41,18 @@ var NumberValidator = {
         this.props.negative = true;
         return this;
     },
+    extend : function(extension) { 
+        var that = this;
+        _.each(_(extension).keys(), function(key) {
+            var func = extension[key];
+            NumberValidator[key] = function() {
+                that.props.extension[key] = { args : Array.prototype.slice.call(arguments), func : func }; 
+                return that;
+            }
+        });
+    },
     validate : function(param) {
+        var that = this;
         if( _(param).isNumber() == false)
             throw new Error('Not number');
         if(this.props.max && param > this.props.max)
@@ -53,6 +67,15 @@ var NumberValidator = {
             throw new Error('Not negative');
         if(this.props.positive && param < 0 )
             throw new Error('Not positive');
+
+        //Loop through added custom vals
+        _.each(_(this.props.extension).keys(), function(key) {
+            var method = that.props.extension[key];
+            var res = method.func.apply(that,[param].concat(method.args));
+            if(!res) { 
+                throw new Error('Custom failed')
+            }
+        });
         return true;
     },
 };

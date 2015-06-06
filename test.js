@@ -38,6 +38,28 @@ describe('Duns - validator', function() {
         should(Duns.validate({}, Duns.number()) ).be.falsy;
         done();
     });
+    it('Validates number extensions', function(done) {
+        Duns.number().extend({
+            between : function(param,min,max) {
+                if(param < min) return false;
+                if(param > max) return false;
+                return true;
+            },
+            sqrtOfThree : function(param) {
+                if(Math.sqrt(param) !== 3) return false;
+                return true;
+            }
+        });
+
+        should(Duns.validate(110, Duns.number().between(100,200))).eql(true, 'Should be between 100-200');
+        should(Duns.validate(90, Duns.number().between(100,200))).eql(false, 'Not valid according to custom');
+
+        should(Duns.validate(90, Duns.number().between(0,100).sqrtOfThree() ) )
+            .eql(false,'Should Not sqrt of three');
+        should(Duns.validate(9, Duns.number().between(0,100).sqrtOfThree() ) )
+            .eql(true,'Should be sqrt of three');
+        done();
+    });
     it('Validates array', function(done) {
 
         should(Duns.validate([100], Duns.array()) ).be.true;
