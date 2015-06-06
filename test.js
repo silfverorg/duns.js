@@ -10,6 +10,24 @@ describe('Duns - validator', function() {
         should(Duns.validate('test', Duns.string()) ).be.true;
         should(Duns.validate(100, Duns.string()) ).be.falsy;
         should(Duns.validate({}, Duns.string()) ).be.falsy;
+
+        done();
+    });
+    it('Validates string().oneOf', function(done) {
+
+        //Test valid cases
+        should(Duns.validate('test1', 
+            Duns.string().oneOf('test1','test2')
+        )).be.eql(true, 'should match test1');
+        should(Duns.validate('test2', 
+            Duns.string().oneOf('test1','test2')
+        )).be.eql(true, 'should match test2');
+
+        //Test invalid valid cases
+        should(Duns.validate('nomatch', 
+            Duns.string().oneOf('test1','test2')
+        )).be.eql(false, 'should not match any case');
+
         done();
     });
     it('Validates number', function(done) {
@@ -60,7 +78,6 @@ describe('Duns - validator', function() {
         )).eql(false, '[100] is not array of strings');
 
         should(Duns.validate(100, Duns.array()) ).eql(false,'100 is not array');
-       
         done();
     });
 });

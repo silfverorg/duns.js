@@ -23,8 +23,7 @@ var Schema = Duns.object().keys({
             .max(140).min(90).greater(90)
             .positive()
         })
-    })
-});
+})
 ```
 
 Then validate
@@ -53,6 +52,7 @@ Must be string.
 * email(email) - must be RFC822 valid email.
 * allow(val)   - whitelist val.
 * deny(val)    - blacklist val.
+* oneOf()      - Must match one of arguments. For instance, Duns.string().oneOf('test1','test2') creates a schema that must match either 'test1' or 'test2'.
 
 ### Duns.array
 Must be array

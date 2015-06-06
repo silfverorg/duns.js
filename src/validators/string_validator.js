@@ -9,8 +9,23 @@ var StringValidator = {
             useEmail : null,
             disallowed : [''],
             allowed : [],
-            exactLength : null
+            exactLength : null,
+            oneOf : null
         };
+        return this;
+    },
+    oneOf : function(list) {
+        this.props.oneOf = [];
+        if(arguments.length > 0) {
+            for(var x=0; x<arguments.length; x++ ) {
+                var arg = arguments[x];
+                if(_(arg).isArray() ) {
+                    this.props.oneOf.concat(arg);
+                } else {
+                    this.props.oneOf.push(arg);
+                }
+            }
+        }
         return this;
     },
     maxlen : function(max) {
@@ -57,9 +72,13 @@ var StringValidator = {
             throw new Error('Argument length is less than allowed');
         if(props.exactLength && param.length !== props.exactLength)
             throw new Error('Argument has invalid length');
-        if(props.useEmail && isEmail(param) === false) 
+        if(props.oneOf && !_(props.oneOf).contains(param) ) {
+            throw new Error('Misses value');
+        }
+        if(props.useEmail && isEmail(param) === false) {
             throw new Error('Argument is not valid RFC822 email');
-            return true;
+        }
+        return true;
     }
 };
 

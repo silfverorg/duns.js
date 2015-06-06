@@ -1,6 +1,6 @@
 {
   "name": "duns",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Object and schema validator for javascript.",
   "main": "index.js",
   "dependencies": {
