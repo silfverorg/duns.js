@@ -1,27 +1,36 @@
-var _ = require('underscore');
-var DunsSchema = require('../duns_schema');
+import _ from 'underscore';
+import DunsSchema from '../duns_schema';
 
-var ObjectValidator = {
-    type : 'Duns-object-validator',
-    _clear : function() {
-        this.props = {
-        };
-        return this;
-    },
-    validate : function(param) {
-        if( _(param).isObject() == false)
-            throw new Error('Not object');
-        return true;
-    },
-    keys : function(keys) {
-        var dschema = Object.create(DunsSchema);
-        dschema.init();
-        _(keys).keys().map(function(key) {
-            var val = keys[key];
-            dschema.build(key,val);
-        });
-        return dschema;
+class ObjectValidator {
+  constructor() {
+    this.type = 'Duns-object-validator';
+    this._clear();
+  }
+
+  _clear() {
+    this.props = {};
+    return this;
+  }
+
+  validate(param) {
+    if ( _(param).isObject() === false) {
+      throw new Error('Not a valid object');
     }
-};
 
-module.exports = ObjectValidator;
+    return true;
+  }
+
+  keys(keys) {
+    let dschema = Object.create(DunsSchema);
+    dschema.init();
+    _(keys).keys().map( (key) => {
+      let val = keys[key];
+      dschema.build(key, val);
+    });
+
+    return dschema;
+  }
+  
+}
+
+export default ObjectValidator;

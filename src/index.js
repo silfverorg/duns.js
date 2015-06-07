@@ -24,8 +24,8 @@ class Duns {
   }
 
   schema(keys) {
-    let dschema = Object.create(DunsSchema);
-    dschema.init();
+    let dschema = new DunsSchema();
+
     _(keys).keys().map( (key) => {
       let val = keys[key];
       dschema.build(key, val);
@@ -35,20 +35,19 @@ class Duns {
   }
 
   string() {
-    console.error('string');
-    return Object.create(StringValidator)._clear();
+    return new StringValidator();
   }
 
   array() {
-    return new ArrayValidator()._clear();
+    return new ArrayValidator();
   }
 
   number() {
-    return Object.create(NumberValidator)._clear();
+    return new NumberValidator();
   }
 
   object() {
-    return Object.create(ObjectValidator)._clear();
+    return new ObjectValidator();
   }
 
   _validateSingle(object, schema) {
@@ -57,11 +56,11 @@ class Duns {
       _(object).keys().map( (key) => {
         try {
           let skey = schema.get(key);
-          if(skey && skey.type === 'Duns-string-validator') {
+          if (skey && skey.type === 'Duns-string-validator') {
                   skey.validate(object[key]);
-          } else if(skey && skey.type === 'Duns-number-validator') {
+          } else if (skey && skey.type === 'Duns-number-validator') {
                   skey.validate(object[key]);
-          } else if(skey && skey.type === 'Duns-array-validator') {
+          } else if (skey && skey.type === 'Duns-array-validator') {
                   skey.validate(object[key]);
           } 
         } catch(err) {
@@ -93,13 +92,13 @@ class Duns {
       _(object).keys().map( (key) => {
         try {
           let s = schema.get(key);
-          if(s.type === 'duns-schema') {
+          if (s.type === 'Duns-schema') {
               if( !Duns.validate(object[key], s) ) {
-                  oki = false;
+                  ok = false;
               }
           } else {
               if( !Duns._validateSingle(object[key], s) ) {
-                  oki = false;
+                  ok = false;
               }
           }
         } catch (err) {
@@ -109,7 +108,7 @@ class Duns {
       });
     } else {
       try {
-        oki = schema.validate(object);
+        ok = schema.validate(object);
       } catch (err) {
         this.err = err;
         ok = false;
