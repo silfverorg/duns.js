@@ -5,14 +5,16 @@ describe('Duns - validator', function() {
     it('Validates basic', function(done) {
         done();
     });
-    it('Validates string', function(done) {
 
+    it.only('Validates string', function(done) {
+        console.log("DUNS2 IS",  Duns.validate);
         should(Duns.validate('test', Duns.string()) ).be.true;
         should(Duns.validate(100, Duns.string()) ).be.falsy;
         should(Duns.validate({}, Duns.string()) ).be.falsy;
 
         done();
     });
+
     it('Validates string().oneOf', function(done) {
 
         //Test valid cases

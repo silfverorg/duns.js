@@ -10,7 +10,8 @@
     "gulp": "^3.9.0",
     "gulp-mocha": "^2.1.1",
     "gulp-watch": "^4.2.4",
-    "should": "^6.0.3"
+    "should": "^6.0.3",
+    "gulp-babel": "~5.1.0"
   },
   "scripts": {
     "test": "gulp test"
