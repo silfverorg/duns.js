@@ -2,8 +2,7 @@ import _ from 'underscore';
 
 import DunsSchema from '../duns_schema';
 
-var NumberExtension = {};
-
+let NumberExtension = {};
 
 class NumberValidator {
 

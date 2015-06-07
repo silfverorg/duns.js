@@ -21,7 +21,7 @@ class ObjectValidator {
   }
 
   keys(keys) {
-    let dschema = Object.create(DunsSchema);
+    let dschema = new DunsSchema();
     dschema.init();
     _(keys).keys().map( (key) => {
       let val = keys[key];
