@@ -26,7 +26,7 @@ class Duns {
   schema(keys) {
     let dschema = new DunsSchema();
 
-    _(keys).keys().map( (key) => {
+    _(keys).keys().map((key) => {
       let val = keys[key];
       dschema.build(key, val);
     });
@@ -53,17 +53,17 @@ class Duns {
   _validateSingle(object, schema) {
     let ok = true;
     if (_(object).isObject() && _(object).isArray() === false) {
-      _(object).keys().map( (key) => {
+      _(object).keys().map((key) => {
         try {
           let skey = schema.get(key);
           if (skey && skey.type === 'Duns-string-validator') {
-                  skey.validate(object[key]);
+            skey.validate(object[key]);
           } else if (skey && skey.type === 'Duns-number-validator') {
-                  skey.validate(object[key]);
+            skey.validate(object[key]);
           } else if (skey && skey.type === 'Duns-array-validator') {
-                  skey.validate(object[key]);
-          } 
-        } catch(err) {
+            skey.validate(object[key]);
+          }
+        } catch (err) {
           this.err = err;
           ok = false;
         }
@@ -71,35 +71,36 @@ class Duns {
     } else {
       try {
         schema.validate(object);
-      } catch(err) {
+      } catch (err) {
         this.err = err;
         ok = false;
       }
     }
+
     return ok;
   }
 
   _clear() {
     this.err = null;
   }
-  
+
   validate(object, schema) {
     //clear messages
-    this._clear(); 
+    this._clear();
     let ok = true;
 
     if (_(object).isObject() && _(object).isArray() === false) {
-      _(object).keys().map( (key) => {
+      _(object).keys().map((key) => {
         try {
           let s = schema.get(key);
           if (s.type === 'Duns-schema') {
-              if( !Duns.validate(object[key], s) ) {
-                  ok = false;
-              }
+            if (!Duns.validate(object[key], s)) {
+              ok = false;
+            }
           } else {
-              if( !Duns._validateSingle(object[key], s) ) {
-                  ok = false;
-              }
+            if (!Duns._validateSingle(object[key], s)) {
+              ok = false;
+            }
           }
         } catch (err) {
           this.err = false;
@@ -114,7 +115,7 @@ class Duns {
         ok = false;
       }
     }
-    
+
     return ok;
   }
 

@@ -13,7 +13,7 @@ class ObjectValidator {
   }
 
   validate(param) {
-    if ( _(param).isObject() === false) {
+    if (_(param).isObject() === false) {
       throw new Error('Not a valid object');
     }
 
@@ -23,14 +23,13 @@ class ObjectValidator {
   keys(keys) {
     let dschema = new DunsSchema();
     dschema.init();
-    _(keys).keys().map( (key) => {
+    _(keys).keys().map((key) => {
       let val = keys[key];
       dschema.build(key, val);
     });
 
     return dschema;
   }
-  
 }
 
 export default ObjectValidator;

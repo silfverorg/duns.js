@@ -11,9 +11,9 @@ class DunsSchema {
   get(key) {
     let ob = this.val[key];
     if (ob === undefined) {
-      throw "Not allowed";
+      throw 'Not allowed';
     }
-    
+
     return ob;
   }
 

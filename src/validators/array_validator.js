@@ -9,10 +9,10 @@ class ArrayValidator {
 
   _clear() {
     this.props = {
-        min : 0,
-        max : null,
-        le : null,
-        items : null,
+      min: 0,
+      max: null,
+      le: null,
+      items: null,
     };
     return this;
   }
@@ -39,7 +39,7 @@ class ArrayValidator {
 
   validate(param) {
     var props = this.props;
-    if ( _(param).isArray() == false) throw new Error('Not array');
+    if (_(param).isArray() == false) throw new Error('Not array');
 
     if (props.min && param.length < props.min) throw new Error('Length not large enough');
 
@@ -51,9 +51,9 @@ class ArrayValidator {
       _(param).each((item) => {
         let oneOf = _(props.items).some((schema) => {
           try {
-              return !!schema.validate(item);
-          } catch(err) { 
-              return false; 
+            return !!schema.validate(item);
+          } catch (err) {
+            return false;
           }
         });
 

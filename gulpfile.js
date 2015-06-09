@@ -4,15 +4,15 @@ var watch = require('gulp-watch');
 var babel = require('gulp-babel');
 
 gulp.task('test-watch', function() {
+  gulp.start('test');
+  watch('**/*.js', function() {
     gulp.start('test');
-    watch('**/*.js', function () {
-        gulp.start('test');
-    });
+  });
 });
 
 gulp.task('test', function() {
-        return gulp.src('test.js', {read: false})
-        .pipe(mocha({reporter: 'nyan'}));
+  return gulp.src('test.js', {read: false, })
+    .pipe(mocha({reporter: 'nyan', }));
 });
 
 gulp.task('build', function() {
@@ -22,6 +22,8 @@ gulp.task('build', function() {
 });
 
 gulp.task('watch', function() {
-  gulp.watch('src/**/*.js', ['build']);
+  gulp.watch('src/**/*.js', [
+    'build',
+  ]);
 });
 

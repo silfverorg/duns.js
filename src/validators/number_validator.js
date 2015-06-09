@@ -14,13 +14,13 @@ class NumberValidator {
 
   _clear() {
     this.props = {
-      extension : {},
-      max       : null,
-      min       : null,
-      greater   : null,
-      less      : null,
-      positive  : null,
-      negative  : null,
+      extension: {},
+      max: null,
+      min: null,
+      greater: null,
+      less: null,
+      positive: null,
+      negative: null,
     };
     return this;
   }
@@ -59,41 +59,41 @@ class NumberValidator {
 
   // FIXME
   extend(extension) {
-    console.error("EXTEND", NumberValidator.prototype);
+    console.error('EXTEND', NumberValidator.prototype);
     _.each(_(extension).keys(), (key) => {
-        let func = extension[key];
-        NumberValidator.prototype[key] = (...args) => {
-          this.props.extension[key] = { args : args, func : func }; 
-          return this;
-        }
+      let func = extension[key];
+      NumberValidator.prototype[key] = (...args) => {
+        this.props.extension[key] = { args: args, func: func, };
+        return this;
+      }
     });
   }
 
   validate(param) {
-      if ( _(param).isNumber() == false) throw new Error('Not number');
+    if (_(param).isNumber() == false) throw new Error('Not number');
 
-      if (this.props.max && param > this.props.max) throw new Error('Invalid length');
+    if (this.props.max && param > this.props.max) throw new Error('Invalid length');
 
-      if (this.props.min && param < this.props.min) throw new Error('Invalid length');
+    if (this.props.min && param < this.props.min) throw new Error('Invalid length');
 
-      if (this.props.less && param > this.props.less) throw new Error('Invalid length');
+    if (this.props.less && param > this.props.less) throw new Error('Invalid length');
 
-      if (this.props.greater && param < this.props.greater)throw new Error('Invalid length');
+    if (this.props.greater && param < this.props.greater)throw new Error('Invalid length');
 
-      if (this.props.negative && param >= 0 ) throw new Error('Not negative');
-      
-      if (this.props.positive && param < 0 ) throw new Error('Not positive');
+    if (this.props.negative && param >= 0) throw new Error('Not negative');
 
-      //Loop through added custom vals
-      _.each(_(this.props.extension).keys(), (key) => {
-          let method = this.props.extension[key];
-          let res = method.func.apply(this, [param].concat(method.args));
-          if(!res) { 
-              throw new Error('Custom failed')
-          }
-      });
+    if (this.props.positive && param < 0) throw new Error('Not positive');
 
-      return true;
+    //Loop through added custom vals
+    _.each(_(this.props.extension).keys(), (key) => {
+      let method = this.props.extension[key];
+      let res = method.func.apply(this, [].concat(param, method.args));
+      if (!res) {
+        throw new Error('Custom failed')
+      }
+    });
+
+    return true;
   }
 
 }
