@@ -59,7 +59,6 @@ class NumberValidator {
 
   // FIXME
   extend(extension) {
-    console.error('EXTEND', NumberValidator.prototype);
     _.each(_(extension).keys(), (key) => {
       let func = extension[key];
       NumberValidator.prototype[key] = (...args) => {

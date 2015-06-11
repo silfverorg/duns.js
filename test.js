@@ -42,9 +42,6 @@ describe('Duns - validator', function() {
   });
 
   it('Validates number extensions', function(done) {
-    // FIXME
-    done();
-    return;
     Duns.number().extend({
       between: function(param, min, max) {
         if (param < min) return false;
@@ -52,15 +49,13 @@ describe('Duns - validator', function() {
         return true;
       },
 
-      sqrtOfThrea: function(param) {
+      sqrtOfThree: function(param) {
         if (Math.sqrt(param) !== 3) return false;
         return true;
       },
     });
-    console.error('got here', Duns.number());
     should(Duns.validate(110, Duns.number().between(100, 200))).eql(true, 'Should be between 100-200');
     should(Duns.validate(90, Duns.number().between(100, 200))).eql(false, 'Not valid according to custom');
-
     should(Duns.validate(90, Duns.number().between(0, 100).sqrtOfThree()))
         .eql(false, 'Should Not sqrt of three');
     should(Duns.validate(9, Duns.number().between(0, 100).sqrtOfThree()))
