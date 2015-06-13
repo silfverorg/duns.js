@@ -40,4 +40,11 @@ describe('Duns - Date Validator', function() {
 
   });
 
+  it('Always accept whitelisted values', function() {
+    should(Duns.validate(null, Duns.any().allow(null))).be.true;
+    should(Duns.validate(undefined, Duns.any().allow(undefined))).be.true;
+
+    should(Duns.validate(1, Duns.any().disallow(1).allow(1))).be.true;
+  });
+
 });

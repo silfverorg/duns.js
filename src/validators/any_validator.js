@@ -11,6 +11,7 @@ class AnyValidator {
     this.formattFunc = null;
     this.props = {
       disallow: null,
+      allow: null,
     };
     return this;
   }
@@ -21,6 +22,15 @@ class AnyValidator {
     }
 
     this.props.disallow = this.props.disallow.concat(dis);
+    return this;
+  }
+
+  allow(allow) {
+    if (this.props.allow === null) {
+      this.props.allow = [];
+    }
+
+    this.props.allow = this.props.allow.concat(allow);
     return this;
   }
 
@@ -47,6 +57,10 @@ class AnyValidator {
 
   validate(param) {
     const props = this.props;
+
+    //Always allow whitelist values
+    if (props.allow && _(props.allow).contains(param)) return true;
+
     if (param === null || param === undefined) return false;
     if (props.disallow && _(props.disallow).contains(param))
       throw new Error('Value is blacklisted');
