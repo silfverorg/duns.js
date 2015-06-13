@@ -128,4 +128,16 @@ describe('Duns - validator', function() {
     should(Duns.validate(100, Duns.array())).eql(false, '100 is not array');
     done();
   });
+
+  it('Validates format', function(done) {
+
+    var Schema = Duns.string().returns(function(val) {
+      return val * 2;
+    }).init(100);
+
+    var val = Schema.format();
+    should(val).eql(200, 'formats correctly');
+
+    done();
+  });
 });

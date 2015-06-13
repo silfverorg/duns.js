@@ -7,6 +7,8 @@ class StringValidator {
   }
 
   _clear() {
+    this.value       = null;
+    this.formattFunc = null;
     this.props = {
       max: null,
       min: null,
@@ -101,6 +103,26 @@ class StringValidator {
     return true;
   }
 
+  returns(param) {
+    if (_(param).isFunction()) {
+      this.formattFunc = param;
+    }
+
+    return this;
+  }
+
+  init(param) {
+    this.value = param;
+    return this;
+  }
+
+  format() {
+    if (_(this.formattFunc).isFunction()) {
+      return this.formattFunc(this.value);
+    }
+
+    return this.value;
+  }
 }
 
 export default StringValidator;
