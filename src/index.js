@@ -21,7 +21,7 @@ class Duns {
   }
 
   error() {
-    return this.error;
+    return this.err;
   }
 
   schema(keys) {
@@ -105,7 +105,7 @@ class Duns {
               ok = false;
             }
           } else {
-            if (!Duns._validateSingle(object[key], s)) {
+            if (!this._validateSingle(object[key], s)) {
               ok = false;
             }
           }

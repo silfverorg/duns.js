@@ -8,6 +8,8 @@ class ArrayValidator {
   }
 
   _clear() {
+    this.value       = null;
+    this.formattFunc = null;
     this.props = {
       min: 0,
       max: null,
@@ -38,7 +40,7 @@ class ArrayValidator {
   }
 
   validate(param) {
-    var props = this.props;
+    const props = this.props;
     if (_(param).isArray() == false) throw new Error('Not array');
 
     if (props.min && param.length < props.min) throw new Error('Length not large enough');
@@ -64,6 +66,27 @@ class ArrayValidator {
     }
 
     return true;
+  }
+
+  returns(param) {
+    if (_(param).isFunction()) {
+      this.formattFunc = param;
+    }
+
+    return this;
+  }
+
+  init(param) {
+    this.value = param;
+    return this;
+  }
+
+  format() {
+    if (_(this.formattFunc).isFunction()) {
+      return _(this.value).map((item) => this.formattFunc(item));
+    }
+
+    return this.value;
   }
 
 }

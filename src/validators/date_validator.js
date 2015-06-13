@@ -102,7 +102,7 @@ class DateValidator {
       throw new Error('Not a valid date');
     }
 
-    var date = moment(param, this.props.format);
+    let date = moment(param, this.props.format);
 
     if (this.props.max && date.isAfter(this.props.max)) throw new Error('Larger than allowed');
 
