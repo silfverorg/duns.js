@@ -1,4 +1,4 @@
-var _ = require('underscore');
+const _ = require('underscore');
 
 class DunsSchema {
   constructor() {
@@ -28,7 +28,7 @@ class DunsSchema {
 
   format() {
     return _(this.data).mapObject((val, key) => {
-      var Schema = this.get(key);
+      const Schema = this.get(key);
       return _(Schema.format).isFunction() ? Schema.init(val).format() : val;
     });
 
