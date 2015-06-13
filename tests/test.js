@@ -1,4 +1,4 @@
-var Duns   = require('./index');
+var Duns   = require('../index');
 var should = require('should');
 
 describe('Duns - validator', function() {
