@@ -39,18 +39,18 @@ describe('Duns - Date Validator', function() {
     should(Duns.validate('2015-01-01', Duns.date().min('2015-02-01'))).be.false;
   });
 
-  it('Will accept a valid format', function() {
-    Duns.validate('20150101', Duns.date().format('YYYYMMDD')).should.be.ok;
+  it('Will accept a valid pattern', function() {
+    Duns.validate('20150101', Duns.date().pattern('YYYYMMDD')).should.be.ok;
   });
 
-  it('Will throw on invalid formatted date when format is not provided', function() {
+  it('Will throw on invalid formatted date when pattern is not provided', function() {
     Duns.validate('20150101', Duns.date()).should.not.be.ok;
   });
 
-  //Note that format YYYYMMDD will validate here since moment ignores non-alphanumeric characters.
+  //Note that pattern YYYYMMDD will validate here since moment ignores non-alphanumeric characters.
   //See http://momentjs.com/docs/#/parsing/string-format/ for more info.
-  it('Will throw on invalid format', function() {
-    Duns.validate('2015-01-01', Duns.date().format('DDMMYYYY')).should.not.be.ok;
+  it('Will throw on invalid pattern', function() {
+    Duns.validate('2015-01-01', Duns.date().pattern('DDMMYYYY')).should.not.be.ok;
   });
 
   describe('Partials', function() {

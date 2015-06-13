@@ -19,7 +19,7 @@ class DateValidator {
     this.props = {
       max: null,
       min: null,
-      format: null,
+      pattern: null,
       partials: [],
     }
   }
@@ -59,19 +59,19 @@ class DateValidator {
   }
 
   /**
-   * The format of the date provided.
+   * The pattern of the date provided.
    *
-   * @name format
+   * @name pattern
    * @function
    * @version 1.0.0
    * @since 1.0.0
    * @access public
-   * @example Duns.date().format('YYYYMMDD')
-   * @param {string} format
+   * @example Duns.date().pattern('YYYYMMDD')
+   * @param {string} pattern
    * @return {DateValidator}
    */
-  format(format) {
-    this.props.format = format;
+  pattern(pattern) {
+    this.props.pattern = pattern;
     return this;
   }
 
@@ -97,12 +97,12 @@ class DateValidator {
   }
 
   validate(param) {
-    //Validate base value. See if it's a valid date or not. If format is defined, we need to consider this.
-    if (this.props.format && moment(param, this.props.format).isValid() === false || !this.props.format && moment(new Date(param)).isValid() === false) {
+    //Validate base value. See if it's a valid date or not. If pattern is defined, we need to consider this.
+    if (this.props.pattern && moment(param, this.props.pattern).isValid() === false || !this.props.pattern && moment(new Date(param)).isValid() === false) {
       throw new Error('Not a valid date');
     }
 
-    let date = moment(param, this.props.format);
+    let date = moment(param, this.props.pattern);
 
     if (this.props.max && date.isAfter(this.props.max)) throw new Error('Larger than allowed');
 
