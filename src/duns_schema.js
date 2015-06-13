@@ -1,6 +1,9 @@
+var _ = require('underscore');
+
 class DunsSchema {
   constructor() {
-    this.val = {};
+    this.data = {};
+    this.val  = {};
     this.type = 'Duns-schema';
   }
 
@@ -15,6 +18,20 @@ class DunsSchema {
     }
 
     return ob;
+  }
+
+  init(param) {
+    this.data = param;
+
+    return this;
+  }
+
+  format() {
+    return _(this.data).mapObject((val, key) => {
+      var Schema = this.get(key);
+      return _(Schema.format).isFunction() ? Schema.init(val).format() : val;
+    });
+
   }
 
 }

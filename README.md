@@ -31,6 +31,24 @@ Then validate
 var data = { pirate : { ninja : 'test', parrot : 100 } };
 Duns.validate(data, Schema) //true
 ```
+
+Duns can also assist in formatting values given a schema.
+
+```
+    var Schema = Duns.object().keys({
+      age: Duns.number().returns(function(age) {
+        returns age * 2;
+      }),
+
+      name : Duns.string().returns(function(name) {
+        returns name + '!';
+      }),
+    });
+
+    Schema.init({ age:20, name: 'test' }).format();
+    //Returns { age:40, name: 'test!' }
+```
+
 ### Duns
 * Duns.validate(object,Schema) - validates a object, given a schema. Returns true on success, false otherwise.
 * Duns.error() - returns last error message after validation.
@@ -44,6 +62,8 @@ Must be number.
 * positive()  - must be positive( > 0).
 * negative()  - must be negative( < 0).
 * extend(objects) - Extends number with validation methods. Example, 
+* returns(cb)  - Defines callback that will be triggered when format is executed. Allows for custom formating of values.
+* format          - Formats number according to returns function.
 ```
     Duns.number().extend({
         between : function(param,min,max) {
@@ -74,6 +94,8 @@ Must be string.
 * allow(val)   - whitelist val.
 * deny(val)    - blacklist val.
 * oneOf()      - Must match one of arguments. For instance, Duns.string().oneOf('test1','test2') creates a schema that must match either 'test1' or 'test2'.
+* returns(cb)  - Defines callback that will be triggered when format is executed. Allows for custom formating of values.
+* format()     - Formats string according to returns function.
 
 ### Duns.array
 Must be array
@@ -81,8 +103,11 @@ Must be array
 * min(min)       - minimum length of array
 * max(max)       - max length of array
 * length(length) - length of array
+* returns(cb)  - Defines callback that will be triggered when format is executed. Allows for custom formating of values.
+* format          - Formats all array values according to their returns function.
 
 ### Duns.object
 Must be object.
 * keys() - creates a nested schema.
+* format - Formats all objects according to their 'returns' function.
 

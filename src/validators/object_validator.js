@@ -22,13 +22,20 @@ class ObjectValidator {
 
   keys(keys) {
     let dschema = new DunsSchema();
-    dschema.init();
     _(keys).keys().map((key) => {
       let val = keys[key];
       dschema.build(key, val);
     });
 
     return dschema;
+  }
+
+  format() {
+    if (_(this.formattFunc).isFunction()) {
+      return this.formattFunc(this.value);
+    }
+
+    return this.value;
   }
 }
 
