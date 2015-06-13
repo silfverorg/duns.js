@@ -83,8 +83,8 @@ class AnyValidator {
       throw new Error('Value is blacklisted');
     if (props.oneOf && _(props.oneOf).isArray()) {
       let ok = false;
-      for (var x = 0; x < props.oneOf.length; x++) {
-        var schema = props.oneOf[x];
+      for (let x = 0; x < props.oneOf.length; x++) {
+        let schema = props.oneOf[x];
         ok = schema.validate(param);
         if (ok) break;
       }
