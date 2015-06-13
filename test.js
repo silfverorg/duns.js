@@ -129,14 +129,26 @@ describe('Duns - validator', function() {
     done();
   });
 
-  it('Validates format', function(done) {
+  it('Validates format for strings', function(done) {
 
     var Schema = Duns.string().returns(function(val) {
+      return val + '!!';
+    }).init('100');
+
+    var val = Schema.format();
+    should(val).eql('100!!', 'formats string correctly');
+
+    done();
+  });
+
+  it('Validates format for numbers', function(done) {
+
+    var Schema = Duns.number().returns(function(val) {
       return val * 2;
     }).init(100);
 
     var val = Schema.format();
-    should(val).eql(200, 'formats correctly');
+    should(val).eql(200, 'formats number correctly');
 
     done();
   });
