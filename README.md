@@ -1,4 +1,6 @@
 # Duns.js
+
+[![Join the chat at https://gitter.im/silfverstrom/duns.js](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/silfverstrom/duns.js?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 Duns - schema validator for javascript. 
 version - 0.0.2
 
