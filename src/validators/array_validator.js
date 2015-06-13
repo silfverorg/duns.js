@@ -40,7 +40,7 @@ class ArrayValidator {
   }
 
   validate(param) {
-    var props = this.props;
+    const props = this.props;
     if (_(param).isArray() == false) throw new Error('Not array');
 
     if (props.min && param.length < props.min) throw new Error('Length not large enough');
