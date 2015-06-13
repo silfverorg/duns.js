@@ -8,6 +8,7 @@ import StringValidator from './validators/string_validator';
 import ArrayValidator from './validators/array_validator';
 import NumberValidator from './validators/number_validator';
 import DateValidator from './validators/date_validator';
+import AnyValidator from './validators/any_validator';
 
 import DunsSchema from './duns_schema';
 
@@ -51,6 +52,10 @@ class Duns {
     return new ObjectValidator();
   }
 
+  any() {
+    return new AnyValidator();
+  }
+
   date() {
     return new DateValidator();
   }
@@ -68,6 +73,8 @@ class Duns {
           } else if (skey && skey.type === 'Duns-array-validator') {
             skey.validate(object[key]);
           } else if (skey && skey.type === 'Duns-date-validator') {
+            skey.validate(object[key]);
+          } else if (skey && skey.type === 'Duns-any-validator') {
             skey.validate(object[key]);
           }
         } catch (err) {
