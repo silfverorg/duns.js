@@ -47,4 +47,12 @@ describe('Duns - Date Validator', function() {
     should(Duns.validate(1, Duns.any().disallow(1).allow(1))).be.true;
   });
 
+  it('Accepts oneOf', function() {
+    var schema = Duns.any().oneOf(Duns.number());
+    should(Duns.validate(10, schema)).be.true;
+
+    should(Duns.validate(null, schema)).be.false;
+    should(Duns.validate('10', schema)).be.false;
+  });
+
 });

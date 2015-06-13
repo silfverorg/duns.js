@@ -12,7 +12,24 @@ class AnyValidator {
     this.props = {
       disallow: null,
       allow: null,
+      oneOf: null,
     };
+    return this;
+  }
+
+  oneOf(...args) {
+    this.props.oneOf = [];
+    if (args.length) {
+      _(args).map((arg) => {
+        if (_(arg).isArray()) {
+          this.props.oneOf.concat(arg);
+        } else {
+          this.props.oneOf.push(arg);
+        }
+      });
+
+    }
+
     return this;
   }
 
@@ -64,6 +81,18 @@ class AnyValidator {
     if (param === null || param === undefined) return false;
     if (props.disallow && _(props.disallow).contains(param))
       throw new Error('Value is blacklisted');
+    if (props.oneOf && _(props.oneOf).isArray()) {
+      let ok = false;
+      for (var x = 0; x < props.oneOf.length; x++) {
+        var schema = props.oneOf[x];
+        ok = schema.validate(param);
+        if (ok) break;
+      }
+
+      if (ok === false) {
+        throw new Error('Not one of schemas');
+      }
+    }
 
     return true;
   }
