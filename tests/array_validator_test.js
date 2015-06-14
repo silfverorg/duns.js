@@ -8,6 +8,11 @@ describe('Arrayvalidator - validates array objects', function() {
     done();
   });
 
+  it('Returns false on no value', function(done) {
+    (Duns.array().validate()).should.be.false;
+    done();
+  });
+
   it('Validates max', function(done) {
     should(Duns.array([100]).max(1).validate()).be.true;
     should(Duns.array([

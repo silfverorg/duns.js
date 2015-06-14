@@ -26,6 +26,11 @@ describe('ObjectValidator - validates objects', function() {
     done();
   });
 
+  it('Returns false on no value', function(done) {
+    (Duns.object().validate()).should.be.false;
+    done();
+  });
+
   it('Should throw on assert', function(done) {
     (Duns.object(100).assert).should.throw();
     done();

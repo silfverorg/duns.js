@@ -11,8 +11,14 @@ describe('Stringvalidator - validates string objects', function() {
     done();
   });
 
+  it('Fails on empty data', function(done) {
+    (Duns.string().validate()).should.be.false;
+    done();
+  });
+
   it('Should throw on assert', function(done) {
     (Duns.string(100).assert).should.throw();
+    (Duns.string().assert).should.throw();
     done();
   });
 

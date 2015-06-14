@@ -7,6 +7,11 @@ describe('Duns - Date Validator', function() {
     should(Duns.validate('2015-01-01', Duns.date())).be.true;
   });
 
+  it('Returns false on no value', function(done) {
+    (Duns.date().validate()).should.be.false;
+    done();
+  });
+
   it('Can be used inside an array', function() {
     Duns.validate([
       '2015-01-01', '2015-02-01', '2014-12-01',
