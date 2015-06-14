@@ -1,15 +1,15 @@
 import _ from 'underscore';
 import DunsSchema from '../duns_schema';
+import AnyValidator from './any_validator';
 
-class ArrayValidator {
+class ArrayValidator extends AnyValidator {
   constructor() {
+    super();
     this.type = 'Duns-array-validator';
     this._clear();
   }
 
   _clear() {
-    this.value       = null;
-    this.formattFunc = null;
     this.props = {
       min: 0,
       max: null,
@@ -66,19 +66,6 @@ class ArrayValidator {
     }
 
     return true;
-  }
-
-  returns(param) {
-    if (_(param).isFunction()) {
-      this.formattFunc = param;
-    }
-
-    return this;
-  }
-
-  init(param) {
-    this.value = param;
-    return this;
   }
 
   format() {

@@ -1,20 +1,20 @@
 import _ from 'underscore';
 
 import DunsSchema from '../duns_schema';
+import AnyValidator from './any_validator';
 
 let NumberExtension = {};
 
-class NumberValidator {
+class NumberValidator extends AnyValidator {
 
   constructor() {
+    super();
     this.type = 'Duns-object-validator';
     this._clear();
     this.extension = NumberExtension;
   }
 
   _clear() {
-    this.value       = null;
-    this.formattFunc = null;
     this.props = {
       extension: {},
       max: null,
@@ -95,27 +95,6 @@ class NumberValidator {
     });
 
     return true;
-  }
-
-  returns(param) {
-    if (_(param).isFunction()) {
-      this.formattFunc = param;
-    }
-
-    return this;
-  }
-
-  init(param) {
-    this.value = param;
-    return this;
-  }
-
-  format() {
-    if (_(this.formattFunc).isFunction()) {
-      return this.formattFunc(this.value);
-    }
-
-    return this.value;
   }
 
 }
