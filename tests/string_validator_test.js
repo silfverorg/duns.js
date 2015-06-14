@@ -11,6 +11,11 @@ describe('Stringvalidator - validates string objects', function() {
     done();
   });
 
+  it('Should throw on assert', function(done) {
+    (Duns.string(100).assert).should.throw();
+    done();
+  });
+
   it('Validates string().oneOf', function(done) {
 
     //Test valid cases

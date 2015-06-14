@@ -111,6 +111,24 @@ class AnyValidator {
 
     return true;
   }
+
+  /**
+  * Asserts that object is valid according to schema, throws otherwise.
+  *
+  * Exactly like validate, but instead of returning false throws an exception.
+  *
+  * @param param optional - parameter to validate.
+  * @author Niklas Silfverström<niklas@silfverstrom.com>
+  * @since 1.0.0
+  * @version 1.0.0
+  */
+  assert(param) {
+    if (!this.validate()) {
+      throw new Error('Did not validate');
+    }
+
+    return true;
+  }
 }
 
 export default AnyValidator;

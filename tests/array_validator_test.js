@@ -17,6 +17,11 @@ describe('Arrayvalidator - validates array objects', function() {
     done();
   });
 
+  it('Should throw on assert', function(done) {
+    (Duns.array(100).assert).should.throw();
+    done();
+  });
+
   it('Validates length', function(done) {
     should(Duns.array([100]).length(1).validate()).be.true;
     should(Duns.array([

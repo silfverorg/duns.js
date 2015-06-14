@@ -26,6 +26,11 @@ describe('ObjectValidator - validates objects', function() {
     done();
   });
 
+  it('Should throw on assert', function(done) {
+    (Duns.object(100).assert).should.throw();
+    done();
+  });
+
   it('Can validate using shorthand syntax', function(done) {
     should(Duns.object({
       age: 100,

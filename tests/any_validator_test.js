@@ -7,6 +7,11 @@ describe('Duns - Any Validator', function() {
     should(Duns.validate('test', Duns.any())).be.true;
   });
 
+  it('Should throw on assert', function(done) {
+    (Duns.any(undefined).assert).should.throw();
+    done();
+  });
+
   it('null and undefined and false should not match any', function() {
     should(Duns.validate(null, Duns.any())).be.false;
     should(Duns.validate(undefined, Duns.any())).be.false;

@@ -11,6 +11,11 @@ describe('NumberValidator - validates numbers', function() {
     done();
   });
 
+  it('Should throw on assert', function(done) {
+    (Duns.number('100').assert).should.throw();
+    done();
+  });
+
   it('Validates number extensions', function(done) {
 
     //This functionality is not supported atm.
