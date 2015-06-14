@@ -6,72 +6,6 @@ describe('Duns - validator', function() {
     done();
   });
 
-  it('Validates array', function(done) {
-
-    should(Duns.validate([100], Duns.array())).be.true;
-    should(Duns.validate([100], Duns.array())).be.true;
-
-    should(Duns.validate([100],
-        Duns.array().items([Duns.number()])
-    )).be.true;
-    should(Duns.validate([
-        100, 200, 300,
-      ],
-      Duns.array().items([Duns.number()])
-    )).be.true;
-    should(Duns.validate([100],
-        Duns.array().items(
-          [
-            Duns.string(), Duns.number(),
-          ]
-        )
-    )).be.true;
-    should(Duns.validate(['100'],
-        Duns.array().items(
-          [
-            Duns.string(), Duns.number(), Duns.array(),
-          ]
-        )
-    )).be.true;
-    should(Duns.validate(
-        [
-          100, 'test',
-        ],
-        Duns.array().items(
-          [
-            Duns.string(), Duns.number(),
-          ]
-        )
-    )).be.true;
-    should(Duns.validate([[]],
-        Duns.array().items([Duns.array()])
-    )).be.true;
-
-    should(Duns.validate([100],
-        Duns.array().items([Duns.array()])
-    )).be.false;
-
-    should(Duns.validate(
-      [
-        100, 'test',
-      ],
-      Duns.array().items([Duns.number()])
-    )).be.false;
-    should(Duns.validate(
-      [
-        100, 'test',
-      ],
-      Duns.array().items([Duns.string()])
-    )).eql(false, 'should match one');
-
-    should(Duns.validate([[100]],
-        Duns.array().items([Duns.string()])
-    )).eql(false, '[100] is not array of strings');
-
-    should(Duns.validate(100, Duns.array())).eql(false, '100 is not array');
-    done();
-  });
-
   it('Validates format for strings', function(done) {
 
     var Schema = Duns.string().returns(function(val) {
@@ -92,26 +26,6 @@ describe('Duns - validator', function() {
 
     var val = Schema.format();
     should(val).eql(200, 'formats number correctly');
-
-    done();
-  });
-
-  it('Validates format for arrays', function(done) {
-
-    var it = [
-      100,
-      200,
-    ];
-    var Schema = Duns.array().returns(function(item) {
-      return item * 2;
-    }).init(it);
-
-    var val = Schema.format();
-    should(val).eql(
-    [
-      200,
-      400,
-    ], 'returns each item times two.');
 
     done();
   });
