@@ -12,6 +12,8 @@ describe('NumberValidator - validates numbers', function() {
   });
 
   it('Validates number extensions', function(done) {
+
+    //This functionality is not supported atm.
     /*
     Duns.number().extend({
       between: function(param, min, max) {

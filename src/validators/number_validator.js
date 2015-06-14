@@ -59,17 +59,6 @@ class NumberValidator extends AnyValidator {
     return this;
   }
 
-  // FIXME
-  extend(extension) {
-    _.each(_(extension).keys(), (key) => {
-      let func = extension[key];
-      NumberValidator.prototype[key] = (...args) => {
-        this.props.extension[key] = { args: args, func: func, };
-        return this;
-      }
-    });
-  }
-
   validate(arg) {
     var param = arg || this.value;
     if (_(param).isNumber() == false) {
