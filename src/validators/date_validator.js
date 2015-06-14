@@ -5,7 +5,7 @@ import moment from 'moment';
 /**
  * Validator for dates.
  *
- * @version 1.0.0
+ * @version 1.0.1 -- added formatting methods.
  * @since 0.0.3
  */
 class DateValidator {
@@ -16,6 +16,8 @@ class DateValidator {
   }
 
   _clear() {
+    this.value       = null;
+    this.formattFunc = null;
     this.props = {
       max: null,
       min: null,
@@ -115,6 +117,43 @@ class DateValidator {
     }
 
     return true;
+  }
+
+  /**
+  * Defines a formatting method.
+  *
+  * @param param - Can be either callback or valid date-format.
+  *   - If callback, formats value according to return.
+  *   - If string, formats value according to date-format. Can be any valid  *    moment-format.
+  * @author Niklas Silfverström
+  * @since 1.0.1
+  * @version 1.0.0 -- Initial
+  */
+  returns(param) {
+    if (_(param).isFunction()) {
+      this.formattFunc = param;
+    } else if (_(param).isString()) {
+      this.formattFunc = (val) => {
+        const props = this.props;
+        const date = (props.pattern) ? moment(val, props.pattern) : moment(val);
+        return date.format(param);
+      }
+    }
+
+    return this;
+  }
+
+  init(param) {
+    this.value = param;
+    return this;
+  }
+
+  format() {
+    if (_(this.formattFunc).isFunction()) {
+      return this.formattFunc(this.value);
+    }
+
+    return this.value;
   }
 }
 
