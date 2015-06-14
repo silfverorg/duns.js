@@ -11,6 +11,22 @@ describe('Stringvalidator - validates string objects', function() {
     done();
   });
 
+  it('Adds custom method', function(done) {
+    should(Duns.string('100').custom(function(val) {
+      return true;
+    }).validate()).be.true;
+
+    should(Duns.string('100').custom(function(val) {
+      return false;
+    }).validate()).be.false;
+
+    should(Duns.string(100).custom(function(val) {
+      return true;
+    }).validate()).be.false;
+
+    done();
+  });
+
   it('Fails on empty data', function(done) {
     (Duns.string().validate()).should.be.false;
     done();

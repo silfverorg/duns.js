@@ -19,19 +19,20 @@ class StringValidator extends AnyValidator {
       ],
       allowed: [],
       exactLength: null,
-      oneOf: null,
+      oneOfString: null,
+      custom: [],
     };
     return this;
   }
 
   oneOf(...args) {
-    this.props.oneOf = [];
+    this.props.oneOfString = [];
     if (args.length) {
       _(args).map((arg) => {
         if (_(arg).isArray()) {
-          this.props.oneOf.concat(arg);
+          this.props.oneOfString.concat(arg);
         } else {
-          this.props.oneOf.push(arg);
+          this.props.oneOfString.push(arg);
         }
       });
     }
@@ -87,6 +88,7 @@ class StringValidator extends AnyValidator {
   * @version 1.0.0
   */
   validate(arg) {
+    if (!super.validate(arg)) return false;
     const param = arg || this.value;
     const props = this.props;
 
@@ -114,7 +116,7 @@ class StringValidator extends AnyValidator {
       return this.fail('Argument has invalid length');
     }
 
-    if (props.oneOf && !_(props.oneOf).contains(param)) {
+    if (props.oneOfString && !_(props.oneOfString).contains(param)) {
       return this.fail('Misses value');
     }
 

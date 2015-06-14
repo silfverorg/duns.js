@@ -11,6 +11,18 @@ describe('NumberValidator - validates numbers', function() {
     done();
   });
 
+  it('Adds custom method', function(done) {
+    should(Duns.number(100).custom(function(val) {
+      return true;
+    }).validate()).be.true;
+
+    should(Duns.number(100).custom(function(val) {
+      return false;
+    }).validate()).be.false;
+
+    done();
+  });
+
   it('Returns false on no value', function(done) {
     (Duns.number().validate()).should.be.false;
     done();

@@ -31,6 +31,22 @@ describe('ObjectValidator - validates objects', function() {
     done();
   });
 
+  it('Adds custom method', function(done) {
+    should(Duns.object({}).custom(function(val) {
+      return true;
+    }).validate()).be.true;
+
+    should(Duns.object({}).custom(function(val) {
+      return false;
+    }).validate()).be.false;
+
+    should(Duns.object(100).custom(function(val) {
+      return true;
+    }).validate()).be.false;
+
+    done();
+  });
+
   it('Should throw on assert', function(done) {
     (Duns.object(100).assert).should.throw();
     done();

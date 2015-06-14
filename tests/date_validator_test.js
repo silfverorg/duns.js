@@ -7,6 +7,22 @@ describe('Duns - Date Validator', function() {
     should(Duns.validate('2015-01-01', Duns.date())).be.true;
   });
 
+  it('Adds custom method', function(done) {
+    should(Duns.date('2015-01-01').custom(function(val) {
+      return true;
+    }).validate()).be.true;
+
+    should(Duns.date('2015-01-01').custom(function(val) {
+      return false;
+    }).validate()).be.false;
+
+    should(Duns.string(null).custom(function(val) {
+      return true;
+    }).validate()).be.false;
+
+    done();
+  });
+
   it('Returns false on no value', function(done) {
     (Duns.date().validate()).should.be.false;
     done();
