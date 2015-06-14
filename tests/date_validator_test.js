@@ -15,6 +15,12 @@ describe('Duns - Date Validator', function() {
     ])).should.be.ok;
   });
 
+  it('Validates with shorthand notation', function(done) {
+    should(Duns.date('2015-01-01').validate()).be.true;
+    should(Duns.date(null).validate()).be.false;
+    done();
+  });
+
   it('Can be used inside an object', function() {
     //FIXME
   });
