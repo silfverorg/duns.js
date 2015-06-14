@@ -12,6 +12,7 @@ describe('NumberValidator - validates numbers', function() {
   });
 
   it('Validates number extensions', function(done) {
+    /*
     Duns.number().extend({
       between: function(param, min, max) {
         if (param < min) return false;
@@ -30,6 +31,19 @@ describe('NumberValidator - validates numbers', function() {
         .eql(false, 'Should Not sqrt of three');
     should(Duns.validate(9, Duns.number().between(0, 100).sqrtOfThree()))
         .eql(true, 'Should be sqrt of three');
+    */
+    done();
+  });
+
+  it('Validates format for numbers', function(done) {
+
+    var Schema = Duns.number().returns(function(val) {
+      return val * 2;
+    }).init(100);
+
+    var val = Schema.format();
+    should(val).eql(200, 'formats number correctly');
+
     done();
   });
 

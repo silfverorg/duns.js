@@ -29,6 +29,18 @@ describe('Stringvalidator - validates string objects', function() {
     done();
   });
 
+  it('Validates format for strings', function(done) {
+
+    var Schema = Duns.string().returns(function(val) {
+      return val + '!!';
+    }).init('100');
+
+    var val = Schema.format();
+    should(val).eql('100!!', 'formats string correctly');
+
+    done();
+  });
+
   it('Validates maxlength', function(done) {
     should(Duns.string('test').maxlen(5).validate()).be.true;
     should(Duns.string('test').maxlen(2).validate()).be.false;

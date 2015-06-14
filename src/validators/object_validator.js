@@ -1,41 +1,54 @@
 import _ from 'underscore';
 import DunsSchema from '../duns_schema';
+import AnyValidator from './any_validator';
 
-class ObjectValidator {
-  constructor() {
+class ObjectValidator extends AnyValidator {
+  constructor(value) {
+    super(value);
     this.type = 'Duns-object-validator';
     this._clear();
   }
 
   _clear() {
-    this.props = {};
+    this.props = {
+      nested: {},
+    };
     return this;
   }
 
-  validate(param) {
+  validate(arg) {
+    let param = arg || this.value;
+
     if (_(param).isObject() === false) {
       throw new Error('Not a valid object');
+    }
+
+    try {
+      _(param).mapObject((value, key) => {
+        const schema = this.props.nested[key];
+        if (!schema) throw 'key does not exist';
+        if (!schema.validate(value)) throw 'Not valid';
+      });
+    } catch (err) {
+      return this.fail(err);
     }
 
     return true;
   }
 
   keys(keys) {
-    let dschema = new DunsSchema();
-    _(keys).keys().map((key) => {
-      let val = keys[key];
-      dschema.build(key, val);
+    _(keys).mapObject((schema, key) => {
+      this.props.nested[key] = schema;
     });
 
-    return dschema;
+    return this;
   }
 
   format() {
-    if (_(this.formattFunc).isFunction()) {
-      return this.formattFunc(this.value);
-    }
-
-    return this.value;
+    return _(this.value).mapObject((val, key) => {
+      const schema = this.props.nested[key];
+      return _(schema.format).isFunction() ? schema.init(val).format() : val;
+    });
   }
 }
 

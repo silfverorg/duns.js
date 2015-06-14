@@ -11,7 +11,7 @@ class AnyValidator {
   _clear() {
     this.value       = null;
     this.formattFunc = null;
-    this.fail        = null;
+    this.failure     = null;
     this.props = {
       disallow: null,
       allow: null,
@@ -21,7 +21,7 @@ class AnyValidator {
   }
 
   fail(err) {
-    this.fail = err;
+    this.failure = err;
     return false;
   }
 
@@ -87,18 +87,25 @@ class AnyValidator {
     if (props.allow && _(props.allow).contains(param)) return true;
 
     if (param === null || param === undefined) return false;
-    if (props.disallow && _(props.disallow).contains(param))
-      throw new Error('Value is blacklisted');
-    if (props.oneOf && _(props.oneOf).isArray()) {
-      let ok = false;
-      for (let x = 0; x < props.oneOf.length; x++) {
-        let schema = props.oneOf[x];
-        ok = schema.validate(param);
-        if (ok) break;
-      }
 
-      if (ok === false) {
-        throw new Error('Not one of schemas');
+    if (props.disallow && _(props.disallow).contains(param)) {
+      return this.fail('Value is blacklisted');
+    }
+
+    if (props.oneOf && _(props.oneOf).isArray()) {
+      try {
+        let ok = false;
+        for (let x = 0; x < props.oneOf.length; x++) {
+          let schema = props.oneOf[x];
+          ok = schema.validate(param);
+          if (ok) break;
+        }
+
+        if (ok === false) {
+          return this.fail('Not one of schemas');
+        }
+      } catch (err) {
+        return this.fail('Not one of schemas');
       }
     }
 

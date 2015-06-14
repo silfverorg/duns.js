@@ -2,7 +2,6 @@ import _ from 'underscore';
 import moment from 'moment';
 import AnyValidator from './any_validator';
 
-
 /**
  * Validator for dates.
  *
@@ -108,7 +107,7 @@ class DateValidator extends AnyValidator {
 
     let date = moment(param, this.props.pattern);
 
-    if(date.isValid() === false) {
+    if (date.isValid() === false) {
       return this.fail('Not valid date');
     }
 

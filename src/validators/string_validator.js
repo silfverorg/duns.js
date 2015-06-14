@@ -90,11 +90,11 @@ class StringValidator extends AnyValidator {
     const param = arg || this.value;
     const props = this.props;
 
-    if (_(param).isString() === false ) { 
+    if (_(param).isString() === false) {
       return this.fail('Value is not string');
     }
 
-    if (_(props.allowed).contains(param) ) {
+    if (_(props.allowed).contains(param)) {
       return true;
     }
 
@@ -102,17 +102,17 @@ class StringValidator extends AnyValidator {
       return this.fail('Value is blacklisted');
     }
 
-    if (props.max && param.length > props.max) { 
+    if (props.max && param.length > props.max) {
       return this.fail('Argument length is larger than allowed');
     }
 
-    if (props.min && param.length < props.min) { 
+    if (props.min && param.length < props.min) {
       return this.fail('Argument length is less than allowed');
     }
 
-    if (props.exactLength && param.length !== props.exactLength) { 
+    if (props.exactLength && param.length !== props.exactLength) {
       return this.fail('Argument has invalid length');
-    } 
+    }
 
     if (props.oneOf && !_(props.oneOf).contains(param)) {
       return this.fail('Misses value');
