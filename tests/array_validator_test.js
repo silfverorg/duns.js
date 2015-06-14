@@ -8,6 +8,22 @@ describe('Arrayvalidator - validates array objects', function() {
     done();
   });
 
+  it('Adds custom method', function(done) {
+    should(Duns.array([100]).custom(function(val) {
+      return true;
+    }).validate()).be.true;
+
+    should(Duns.array([100]).custom(function(val) {
+      return false;
+    }).validate()).be.false;
+
+    should(Duns.array(100).custom(function(val) {
+      return true;
+    }).validate()).be.false;
+
+    done();
+  });
+
   it('Returns false on no value', function(done) {
     (Duns.array().validate()).should.be.false;
     done();

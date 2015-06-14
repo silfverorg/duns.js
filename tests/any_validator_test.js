@@ -12,8 +12,25 @@ describe('Duns - Any Validator', function() {
     done();
   });
 
+  it('Uses shorthand notation', function(done) {
+    should(Duns.any(100).validate()).be.true;
+    done();
+  });
+
   it('Should throw on assert', function(done) {
     (Duns.any(undefined).assert).should.throw();
+    done();
+  });
+
+  it('Adds custom method', function(done) {
+    should(Duns.any(100).custom(function(val) {
+      return true;
+    }).validate()).be.true;
+
+    should(Duns.any(100).custom(function(val) {
+      return false;
+    }).validate()).be.false;
+
     done();
   });
 

@@ -14,6 +14,7 @@ class ArrayValidator extends AnyValidator {
       max: null,
       le: null,
       items: null,
+      custom: [],
     };
     return this;
   }
@@ -39,6 +40,7 @@ class ArrayValidator extends AnyValidator {
   }
 
   validate(arg) {
+    if (!super.validate(arg)) return false;
     let param = arg || this.value;
     const props = this.props;
     if (_(param).isArray() == false) {

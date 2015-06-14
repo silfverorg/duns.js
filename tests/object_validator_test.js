@@ -26,8 +26,41 @@ describe('ObjectValidator - validates objects', function() {
     done();
   });
 
+  it('formats empty', function(done) {
+    (Duns.object({ test: 100 }).format());
+    done();
+  });
+
+  it('Formats schemas with vals that does not exist', function(done) {
+    var schema = Duns.object({ test: 100})
+    .keys({
+      test2: Duns.any().returns(function(val, siblings) {
+        return siblings.test * 2;
+      })
+    });
+
+    should(schema.format().test2).eql(200);
+    done();
+  });
+
   it('Returns false on no value', function(done) {
     (Duns.object().validate()).should.be.false;
+    done();
+  });
+
+  it('Adds custom method', function(done) {
+    should(Duns.object({}).custom(function(val) {
+      return true;
+    }).validate()).be.true;
+
+    should(Duns.object({}).custom(function(val) {
+      return false;
+    }).validate()).be.false;
+
+    should(Duns.object(100).custom(function(val) {
+      return true;
+    }).validate()).be.false;
+
     done();
   });
 

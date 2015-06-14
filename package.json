@@ -1,6 +1,6 @@
 {
   "name": "duns",
-  "version": "0.0.3",
+  "version": "0.1.0-rc7",
   "description": "Object and schema validator for javascript.",
   "main": "index.js",
   "dependencies": {
@@ -8,15 +8,20 @@
     "underscore": "^1.8.3"
   },
   "devDependencies": {
+    "babelify": "^6.1.2",
+    "browserify": "^10.2.4",
+    "fs": "0.0.2",
     "gulp": "^3.9.0",
+    "gulp-babel": "~5.1.0",
+    "gulp-concat": "^2.5.2",
     "gulp-mocha": "^2.1.1",
+    "gulp-uglify": "^1.2.0",
     "gulp-watch": "^4.2.4",
-    "should": "^6.0.3",
-    "gulp-babel": "~5.1.0"
+    "should": "^6.0.3"
   },
   "scripts": {
-    "postinstall": "gulp build",
-    "test": "gulp test"
+    "test": "gulp test",
+    "prepublish": "gulp build"
   },
   "repository": {
     "type": "git",

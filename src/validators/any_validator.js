@@ -10,12 +10,14 @@ class AnyValidator {
 
   _clear() {
     this.value       = null;
+    this.siblings    = null;
     this.formattFunc = null;
     this.failure     = null;
     this.props = {
       disallow: null,
       allow: null,
       oneOf: null,
+      custom: [],
     };
     return this;
   }
@@ -23,6 +25,14 @@ class AnyValidator {
   fail(err) {
     this.failure = err;
     return false;
+  }
+
+  custom(cb) {
+    if (_(cb).isFunction()) {
+      this.props.custom.push(cb);
+    }
+
+    return this;
   }
 
   oneOf(...args) {
@@ -67,20 +77,22 @@ class AnyValidator {
     return this;
   }
 
-  init(param) {
+  init(param, siblings) {
     this.value = param;
+    this.siblings = siblings;
     return this;
   }
 
   format() {
     if (_(this.formattFunc).isFunction()) {
-      return this.formattFunc(this.value);
+      return this.formattFunc(this.value, this.siblings);
     }
 
     return this.value;
   }
 
-  validate(param) {
+  validate(arg) {
+    const param = (arg === undefined) ? this.value : arg;
     const props = this.props;
 
     //Always allow whitelist values
@@ -90,6 +102,14 @@ class AnyValidator {
 
     if (props.disallow && _(props.disallow).contains(param)) {
       return this.fail('Value is blacklisted');
+    }
+
+    if (props.custom && props.custom.length > 0) {
+      for (let i = 0; i < props.custom.length; i++) {
+        const cb = props.custom[i];
+        const res = cb(param);
+        if (!res) return this.fail('cb not validated');
+      }
     }
 
     if (props.oneOf && _(props.oneOf).isArray()) {

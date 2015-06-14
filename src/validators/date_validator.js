@@ -22,6 +22,7 @@ class DateValidator extends AnyValidator {
       min: null,
       pattern: null,
       partials: [],
+      custom: [],
     }
   }
 
@@ -98,6 +99,7 @@ class DateValidator extends AnyValidator {
   }
 
   validate(arg) {
+    if (!super.validate(arg)) return false;
     var param = arg || this.value;
 
     //Validate base value. See if it's a valid date or not. If pattern is defined, we need to consider this.
