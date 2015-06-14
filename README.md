@@ -61,29 +61,8 @@ Must be number.
 * less(le)    - must be less than le.
 * positive()  - must be positive( > 0).
 * negative()  - must be negative( < 0).
-* extend(objects) - Extends number with validation methods. Example, 
 * returns(cb)  - Defines callback that will be triggered when format is executed. Allows for custom formating of values.
 * format          - Formats number according to returns function.
-```
-    Duns.number().extend({
-        between : function(param,min,max) {
-            if(param < min) return false;
-            if(param > max) return false;
-            return true;
-        },
-        sqrtIsThree : function(param) {
-            if(Math.sqrt(param) !== 3) return false;
-            return true;
-        }
-    });
-    //Validate a number between 0 and 100, that has a square root that is == 3.
-    var ok = Duns.validate(
-        9, 
-        Duns.number().between(0,100).sqrtOfThree()
-    ); 
-    //ok === true
-```
-
 
 ### Duns.string
 Must be string.

@@ -1,20 +1,28 @@
 import _ from 'underscore';
 
 class AnyValidator {
-  constructor() {
+  constructor(val) {
     this.type = 'Duns-any-validator';
     this._clear();
+
+    this.value = val;
   }
 
   _clear() {
     this.value       = null;
     this.formattFunc = null;
+    this.failure     = null;
     this.props = {
       disallow: null,
       allow: null,
       oneOf: null,
     };
     return this;
+  }
+
+  fail(err) {
+    this.failure = err;
+    return false;
   }
 
   oneOf(...args) {
@@ -79,19 +87,44 @@ class AnyValidator {
     if (props.allow && _(props.allow).contains(param)) return true;
 
     if (param === null || param === undefined) return false;
-    if (props.disallow && _(props.disallow).contains(param))
-      throw new Error('Value is blacklisted');
-    if (props.oneOf && _(props.oneOf).isArray()) {
-      let ok = false;
-      for (let x = 0; x < props.oneOf.length; x++) {
-        let schema = props.oneOf[x];
-        ok = schema.validate(param);
-        if (ok) break;
-      }
 
-      if (ok === false) {
-        throw new Error('Not one of schemas');
+    if (props.disallow && _(props.disallow).contains(param)) {
+      return this.fail('Value is blacklisted');
+    }
+
+    if (props.oneOf && _(props.oneOf).isArray()) {
+      try {
+        let ok = false;
+        for (let x = 0; x < props.oneOf.length; x++) {
+          let schema = props.oneOf[x];
+          ok = schema.validate(param);
+          if (ok) break;
+        }
+
+        if (ok === false) {
+          return this.fail('Not one of schemas');
+        }
+      } catch (err) {
+        return this.fail('Not one of schemas');
       }
+    }
+
+    return true;
+  }
+
+  /**
+  * Asserts that object is valid according to schema, throws otherwise.
+  *
+  * Exactly like validate, but instead of returning false throws an exception.
+  *
+  * @param param optional - parameter to validate.
+  * @author Niklas Silfverström<niklas@silfverstrom.com>
+  * @since 1.0.0
+  * @version 1.0.0
+  */
+  assert(param) {
+    if (!this.validate()) {
+      throw new Error('Did not validate');
     }
 
     return true;

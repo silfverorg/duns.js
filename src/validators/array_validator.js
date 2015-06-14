@@ -1,10 +1,9 @@
 import _ from 'underscore';
-import DunsSchema from '../duns_schema';
 import AnyValidator from './any_validator';
 
 class ArrayValidator extends AnyValidator {
-  constructor() {
-    super();
+  constructor(param) {
+    super(param);
     this.type = 'Duns-array-validator';
     this._clear();
   }
@@ -39,30 +38,43 @@ class ArrayValidator extends AnyValidator {
     return this;
   }
 
-  validate(param) {
+  validate(arg) {
+    let param = arg || this.value;
     const props = this.props;
-    if (_(param).isArray() == false) throw new Error('Not array');
+    if (_(param).isArray() == false) {
+      return this.fail('Not array');
+    }
 
-    if (props.min && param.length < props.min) throw new Error('Length not large enough');
+    if (props.min && param.length < props.min) {
+      return this.fail('Length not large enough');
+    }
 
-    if (props.max && param.length > props.max) throw new Error('Length larger than max');
+    if (props.max && param.length > props.max) {
+      return this.fail('Length larger than max');
+    }
 
-    if (props.len && param.length !== props.len) throw new Error('Length does not equal schema length');
+    if (props.len && param.length !== props.len) {
+      return this.fail('Length does not equal schema length');
+    }
 
     if (props.items) {
-      _(param).each((item) => {
-        let oneOf = _(props.items).some((schema) => {
-          try {
-            return !!schema.validate(item);
-          } catch (err) {
-            return false;
+      try {
+        _(param).each((item) => {
+          let oneOf = _(props.items).some((schema) => {
+            try {
+              return !!schema.validate(item);
+            } catch (err) {
+              return false;
+            }
+          });
+
+          if (oneOf === false) {
+            throw 'Did not match ';
           }
         });
-
-        if (oneOf === false) {
-          throw new Error('Did not match ');
-        }
-      });
+      } catch (err) {
+        return this.fail(err);
+      }
     }
 
     return true;

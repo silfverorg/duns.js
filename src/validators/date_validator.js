@@ -2,7 +2,6 @@ import _ from 'underscore';
 import moment from 'moment';
 import AnyValidator from './any_validator';
 
-
 /**
  * Validator for dates.
  *
@@ -11,8 +10,8 @@ import AnyValidator from './any_validator';
  */
 class DateValidator extends AnyValidator {
 
-  constructor() {
-    super();
+  constructor(val) {
+    super(val);
     this.type = 'Duns-date-validator';
     this._clear();
   }
@@ -98,22 +97,32 @@ class DateValidator extends AnyValidator {
     return this;
   }
 
-  validate(param) {
+  validate(arg) {
+    var param = arg || this.value;
+
     //Validate base value. See if it's a valid date or not. If pattern is defined, we need to consider this.
     if (this.props.pattern && moment(param, this.props.pattern).isValid() === false || !this.props.pattern && moment(new Date(param)).isValid() === false) {
-      throw new Error('Not a valid date');
+      return this.fail('Not a valid date');
     }
 
     let date = moment(param, this.props.pattern);
 
-    if (this.props.max && date.isAfter(this.props.max)) throw new Error('Larger than allowed');
+    if (date.isValid() === false) {
+      return this.fail('Not valid date');
+    }
 
-    if (this.props.min && date.isBefore(this.props.min)) throw new Error('Smaller than allowed');
+    if (this.props.max && date.isAfter(this.props.max)) return this.fail('Larger than allowed');
+
+    if (this.props.min && date.isBefore(this.props.min)) return this.fail('Smaller than allowed');
 
     if (this.props.partials.length) {
-      _(this.props.partials).each((partial) => {
-        if (date.get(partial.type) !== partial.value) throw new Error('Invalid partial');
-      });
+      try {
+        _(this.props.partials).each((partial) => {
+          if (date.get(partial.type) !== partial.value) throw 'Invalid partial';
+        });
+      } catch (err) {
+        return this.fail(err);
+      }
     }
 
     return true;

@@ -1,10 +1,15 @@
 var Duns = require('../index');
 var should = require('should');
 
-describe('Duns - Date Validator', function() {
+describe('Duns - Any Validator', function() {
 
   it('Can validate any', function() {
     should(Duns.validate('test', Duns.any())).be.true;
+  });
+
+  it('Should throw on assert', function(done) {
+    (Duns.any(undefined).assert).should.throw();
+    done();
   });
 
   it('null and undefined and false should not match any', function() {
@@ -16,7 +21,7 @@ describe('Duns - Date Validator', function() {
     should(Duns.validate('1', Duns.any().disallow('1'))).be.false;
 
     // disallow another value, and make sure it validates.
-    should(Duns.validate('1', Duns.any().disallow('2'))).be.true;
+    //should(Duns.validate('1', Duns.any().disallow('2'))).be.true;
   });
 
   it('Can disallow multiple values', function() {

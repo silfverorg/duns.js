@@ -1,9 +1,10 @@
 import _ from 'underscore';
 import AnyValidator from './any_validator';
+import isEmail from '../is_email';
 
 class StringValidator extends AnyValidator {
-  constructor() {
-    super();
+  constructor(value) {
+    super(value);
     this.type = 'Duns-string-validator';
     this._clear();
   }
@@ -60,7 +61,7 @@ class StringValidator extends AnyValidator {
 
   allow(val) {
     if (_(val).isArray()) {
-      this.props.allowed = this.disallowed.concat(val);
+      this.props.allowed = this.props.allowed.concat(val);
     } else {
       this.props.allowed.push(val);
     }
@@ -78,26 +79,47 @@ class StringValidator extends AnyValidator {
     return this;
   }
 
-  validate(param) {
-    let props = this.props;
-    if (_(param).isString() === false) throw new Error('Value is not string');
+  /**
+  * Validates param.
+  *
+  * @author Niklas Silfverström<niklas@silfverstrom.com>
+  * @since 1.0.0
+  * @version 1.0.0
+  */
+  validate(arg) {
+    const param = arg || this.value;
+    const props = this.props;
 
-    if (_(props.disallowed).contains(param) && _(props.allowed).contains(param) === false) {
-      throw new Error('Value is blacklisted');
+    if (_(param).isString() === false) {
+      return this.fail('Value is not string');
     }
 
-    if (props.max && param.length > props.max) throw new Error('Argument length is larger than allowed');
+    if (_(props.allowed).contains(param)) {
+      return true;
+    }
 
-    if (props.min && param.length < props.min) throw new Error('Argument length is less than allowed');
+    if (_(props.disallowed).contains(param) && _(props.allowed).contains(param) === false) {
+      return this.fail('Value is blacklisted');
+    }
 
-    if (props.exactLength && param.length !== props.exactLength) throw new Error('Argument has invalid length');
+    if (props.max && param.length > props.max) {
+      return this.fail('Argument length is larger than allowed');
+    }
+
+    if (props.min && param.length < props.min) {
+      return this.fail('Argument length is less than allowed');
+    }
+
+    if (props.exactLength && param.length !== props.exactLength) {
+      return this.fail('Argument has invalid length');
+    }
 
     if (props.oneOf && !_(props.oneOf).contains(param)) {
-      throw new Error('Misses value');
+      return this.fail('Misses value');
     }
 
     if (props.useEmail && isEmail(param) === false) {
-      throw new Error('Argument is not valid RFC822 email');
+      return this.fail('Argument is not valid RFC822 email');
     }
 
     return true;
