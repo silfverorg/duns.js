@@ -1,5 +1,6 @@
 import _ from 'underscore';
 import moment from 'moment';
+import AnyValidator from './any_validator';
 
 
 /**
@@ -8,16 +9,15 @@ import moment from 'moment';
  * @version 1.0.1 -- added formatting methods.
  * @since 0.0.3
  */
-class DateValidator {
+class DateValidator extends AnyValidator {
 
   constructor() {
+    super();
     this.type = 'Duns-date-validator';
     this._clear();
   }
 
   _clear() {
-    this.value       = null;
-    this.formattFunc = null;
     this.props = {
       max: null,
       min: null,
@@ -143,18 +143,6 @@ class DateValidator {
     return this;
   }
 
-  init(param) {
-    this.value = param;
-    return this;
-  }
-
-  format() {
-    if (_(this.formattFunc).isFunction()) {
-      return this.formattFunc(this.value);
-    }
-
-    return this.value;
-  }
 }
 
 export default DateValidator;
