@@ -1,0 +1,91 @@
+var Duns   = require('../index');
+var should = require('should');
+
+describe('Stringvalidator - validates string objects', function() {
+
+  it('Validates string', function(done) {
+    should(Duns.validate('test', Duns.string())).be.true;
+    should(Duns.validate(100, Duns.string())).be.falsy;
+    should(Duns.validate({}, Duns.string())).be.falsy;
+
+    done();
+  });
+
+  it('Validates string().oneOf', function(done) {
+
+    //Test valid cases
+    should(Duns.validate('test1',
+        Duns.string().oneOf('test1', 'test2')
+    )).be.eql(true, 'should match test1');
+    should(Duns.validate('test2',
+        Duns.string().oneOf('test1', 'test2')
+    )).be.eql(true, 'should match test2');
+
+    //Test invalid valid cases
+    should(Duns.validate('nomatch',
+        Duns.string().oneOf('test1', 'test2')
+    )).be.eql(false, 'should not match any case');
+
+    done();
+  });
+
+  it('Validates maxlength', function(done) {
+    should(Duns.string('test').maxlen(5).validate()).be.true;
+    should(Duns.string('test').maxlen(2).validate()).be.false;
+    done();
+  });
+
+  it('Validates minlength', function(done) {
+    should(Duns.string('test').minlen(2).validate()).be.true;
+    should(Duns.string('test').minlen(5).validate()).be.false;
+    done();
+  });
+
+  it('Validates exact length', function(done) {
+    should(Duns.string('test').length(4).validate()).be.true;
+    should(Duns.string('test').length(5).validate()).be.false;
+    done();
+  });
+
+  it('Validates email', function(done) {
+    should(Duns.string('test@test.com').email().validate()).be.true;
+    should(Duns.string('test').email().validate()).be.false;
+    done();
+  });
+
+  it('Validates allow', function(done) {
+    should(Duns.string('').allow('').validate()).be.true;
+    should(Duns.string('').validate()).be.false;
+    done();
+  });
+
+  it('Validates deny', function(done) {
+    should(Duns.string('something').deny('test').validate()).be.true;
+    should(Duns.string('test').deny('test').validate()).be.false;
+    done();
+  });
+
+  describe('Can validate objects with values', function() {
+    it('Can validate directly on schema', function(done) {
+      should(Duns.string().validate('test')).be.true;
+      done();
+    });
+
+    it('Can validate using init method value', function(done) {
+      should(Duns.string().init('test').validate()).be.true;
+      done();
+    });
+
+    it('Can validate using bound value from constructor ', function(done) {
+      should(Duns.string('test').validate()).be.true;
+      done();
+    });
+
+    it('Validates using bound value, and nested methods', function(done) {
+      should(Duns.string('test').maxlen(5).validate()).be.true;
+      should(Duns.string('test').maxlen(2).validate()).be.false;
+      done();
+    });
+
+  });
+});

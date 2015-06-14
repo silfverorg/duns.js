@@ -36,28 +36,28 @@ class Duns {
     return dschema;
   }
 
-  string() {
-    return new StringValidator();
+  string(val) {
+    return new StringValidator(val);
   }
 
-  array() {
-    return new ArrayValidator();
+  array(val) {
+    return new ArrayValidator(val);
   }
 
-  number() {
-    return new NumberValidator();
+  number(val) {
+    return new NumberValidator(val);
   }
 
-  object() {
-    return new ObjectValidator();
+  object(val) {
+    return new ObjectValidator(val);
   }
 
-  any() {
-    return new AnyValidator();
+  any(val) {
+    return new AnyValidator(val);
   }
 
-  date() {
-    return new DateValidator();
+  date(val) {
+    return new DateValidator(val);
   }
 
   _validateSingle(object, schema) {
@@ -66,17 +66,19 @@ class Duns {
       _(object).keys().map((key) => {
         try {
           let skey = schema.get(key);
+          let ret = false;
           if (skey && skey.type === 'Duns-string-validator') {
-            skey.validate(object[key]);
+            ret = skey.validate(object[key]);
           } else if (skey && skey.type === 'Duns-number-validator') {
-            skey.validate(object[key]);
+            ret = skey.validate(object[key]);
           } else if (skey && skey.type === 'Duns-array-validator') {
-            skey.validate(object[key]);
+            ret = skey.validate(object[key]);
           } else if (skey && skey.type === 'Duns-date-validator') {
-            skey.validate(object[key]);
+            ret = skey.validate(object[key]);
           } else if (skey && skey.type === 'Duns-any-validator') {
-            skey.validate(object[key]);
+            ret = skey.validate(object[key]);
           }
+          if(!ret) throw '';
         } catch (err) {
           this.err = err;
           ok = false;
@@ -84,7 +86,8 @@ class Duns {
       });
     } else {
       try {
-        schema.validate(object);
+        let ret = schema.validate(object);
+        if(!ret) throw '';
       } catch (err) {
         this.err = err;
         ok = false;

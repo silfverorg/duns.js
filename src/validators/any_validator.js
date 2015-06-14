@@ -1,20 +1,28 @@
 import _ from 'underscore';
 
 class AnyValidator {
-  constructor() {
+  constructor(val) {
     this.type = 'Duns-any-validator';
     this._clear();
+
+    this.value = val;
   }
 
   _clear() {
     this.value       = null;
     this.formattFunc = null;
+    this.fail        = null;
     this.props = {
       disallow: null,
       allow: null,
       oneOf: null,
     };
     return this;
+  }
+
+  fail(err) {
+    this.fail = err;
+    return false;
   }
 
   oneOf(...args) {

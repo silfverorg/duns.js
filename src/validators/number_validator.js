@@ -7,8 +7,8 @@ let NumberExtension = {};
 
 class NumberValidator extends AnyValidator {
 
-  constructor() {
-    super();
+  constructor(val) {
+    super(val);
     this.type = 'Duns-object-validator';
     this._clear();
     this.extension = NumberExtension;
@@ -70,29 +70,48 @@ class NumberValidator extends AnyValidator {
     });
   }
 
-  validate(param) {
-    if (_(param).isNumber() == false) throw new Error('Not number');
+  validate(arg) {
+    var param = arg || this.value;
+    if (_(param).isNumber() == false) {
+      return this.fail('Not number');
+    }
 
-    if (this.props.max && param > this.props.max) throw new Error('Invalid length');
+    if (this.props.max && param > this.props.max) {
+      return this.fail('Number does not fit max-constraint');
+    }
 
-    if (this.props.min && param < this.props.min) throw new Error('Invalid length');
+    if (this.props.min && param < this.props.min) {
+      return this.fail('Number does not fit min-constraint');
+    }
 
-    if (this.props.less && param > this.props.less) throw new Error('Invalid length');
+    if (this.props.less && param > this.props.less) {
+      return this.fail('Invalid length');
+    }
 
-    if (this.props.greater && param < this.props.greater)throw new Error('Invalid length');
+    if (this.props.greater && param < this.props.greater) {
+      return this.fail('Invalid length');
+    }
 
-    if (this.props.negative && param >= 0) throw new Error('Not negative');
+    if (this.props.negative && param >= 0) {
+      return this.fail('Not negative');
+    }
 
-    if (this.props.positive && param < 0) throw new Error('Not positive');
+    if (this.props.positive && param < 0) {
+      return this.fail('Not positive');
+    }
 
     //Loop through added custom vals
-    _.each(_(this.props.extension).keys(), (key) => {
-      let method = this.props.extension[key];
-      let res = method.func.apply(this, [].concat(param, method.args));
-      if (!res) {
-        throw new Error('Custom failed')
-      }
-    });
+    try {
+      _.each(_(this.props.extension).keys(), (key) => {
+        let method = this.props.extension[key];
+        let res = method.func.apply(this, [].concat(param, method.args));
+        if (!res) {
+          throw 'Custom failed'
+        }
+      });
+    } catch (err) {
+      return this.fail(err);
+    }
 
     return true;
   }
