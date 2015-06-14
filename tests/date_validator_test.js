@@ -70,6 +70,23 @@ describe('Duns - Date Validator', function() {
     it('Will throw if just one partial is invalid', function() {
       Duns.validate('2015-01-01', Duns.date().partial('year', 2015).partial('month', 1)).should.not.be.ok;
     });
+  });
+
+  describe('Formats values', function() {
+
+    it('Formats a date', function() {
+      Duns.date().returns(function(val) {
+        return val + '01';
+      }).init('20150101').format().should.eql('2015010101');
+    });
+
+    it('Formats a date with shorthand notation', function() {
+      Duns.date().returns('YYYYMM').init('2015-01-01').format().should.eql('201501');
+    });
+
+    it('Formats a date with shorthand notation, given custom pattern', function() {
+      Duns.date().returns('YYYYMM').pattern('YYYYMMDD').init('20150101').format().should.eql('201501');
+    });
 
   });
 
