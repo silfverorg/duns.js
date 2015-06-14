@@ -1,6 +1,4 @@
 import _ from 'underscore';
-
-import DunsSchema from '../duns_schema';
 import AnyValidator from './any_validator';
 
 let NumberExtension = {};
