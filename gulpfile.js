@@ -2,6 +2,11 @@ var gulp = require('gulp');
 var mocha = require('gulp-mocha');
 var watch = require('gulp-watch');
 var babel = require('gulp-babel');
+var uglify = require('gulp-uglify');
+var concat = require('gulp-concat');
+var fs = require('fs');
+var browserify = require('browserify');
+var babelify = require('babelify');
 
 gulp.task('default', [
   'build', 'buildandtest',
@@ -26,3 +31,4 @@ gulp.task('buildandtest', function() {
     'src/**/*.js', 'tests/**/*.js',
   ], ['build']);
 });
+

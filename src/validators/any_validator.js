@@ -10,6 +10,7 @@ class AnyValidator {
 
   _clear() {
     this.value       = null;
+    this.siblings    = null;
     this.formattFunc = null;
     this.failure     = null;
     this.props = {
@@ -101,14 +102,15 @@ class AnyValidator {
     return this;
   }
 
-  init(param) {
+  init(param, siblings) {
     this.value = param;
+    this.siblings = siblings;
     return this;
   }
 
   format() {
     if (_(this.formattFunc).isFunction()) {
-      return this.formattFunc(this.value);
+      return this.formattFunc(this.value, this.siblings);
     }
 
     return this.value;
