@@ -120,12 +120,14 @@ describe('ObjectValidator - validates objects', function() {
 
   it('Extends object', function(done) {
     var extensionSchema = Duns.object().extend({
-      is42: function(val) {
+      is42: function(val, param) {
         return val.test === 42;
       }
+    }).keys({
+      test: Duns.number()
     });
 
-    should(extensionSchema.is42({
+    should(extensionSchema.is42().validate({
       test: 42,
     })).be.true;
 

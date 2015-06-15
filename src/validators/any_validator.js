@@ -6,6 +6,9 @@ class AnyValidator {
     this._clear();
 
     this.value = val;
+
+    // Generic extensions for all schemas.
+    this.extensions = {};
   }
 
   _clear() {
@@ -51,8 +54,8 @@ class AnyValidator {
       // Do not override existing.
       if (this[key] === undefined) {
         this[key] = (...param) => {
-          console.log('param is', param);
-          return func.apply(this, param);
+          this.extensions[key] = { func: func, param: param, };
+          return this;
         }
       }
     });
@@ -119,6 +122,18 @@ class AnyValidator {
   validate(arg) {
     const param = (arg === undefined) ? this.value : arg;
     const props = this.props;
+
+    // Check custom functions
+    try {
+      _(this.extensions).mapObject((obj, key) => {
+        const func   = obj.func;
+        if (!func.apply(this, [param].concat(obj.param))) {
+          throw 'Failed';
+        }
+      });
+    } catch (err) {
+      return this.fail(err);
+    }
 
     //Always allow whitelist values
     if (props.allow && _(props.allow).contains(param)) return true;

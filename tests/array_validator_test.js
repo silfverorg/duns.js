@@ -150,8 +150,8 @@ describe('Arrayvalidator - validates array objects', function() {
       }
     });
 
-    should(extensionSchema.is42([42])).be.true;
-    should(extensionSchema.is42([100])).be.false;
+    should(extensionSchema.is42().validate([42])).be.true;
+    should(extensionSchema.is42().validate([100])).be.false;
 
     done();
   });
