@@ -101,4 +101,17 @@ describe('NumberValidator - validates numbers', function() {
     done();
   });
 
+  it('Extends number', function(done) {
+    var extensionSchema = Duns.number().extend({
+      is42: function(val) {
+        return val === 42;
+      }
+    });
+
+    should(extensionSchema.is42().validate(42)).be.true;
+    should(extensionSchema.is42().validate(100)).be.false;
+
+    done();
+  });
+
 });

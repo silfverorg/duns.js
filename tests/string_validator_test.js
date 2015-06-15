@@ -127,4 +127,18 @@ describe('Stringvalidator - validates string objects', function() {
     });
 
   });
+
+  it('Extends string', function(done) {
+    var extensionSchema = Duns.string().extend({
+      is42: function(val) {
+        return val === '42';
+      }
+    });
+
+    should(extensionSchema.is42().validate('42')).be.true;
+    should(extensionSchema.is42().validate('100')).be.false;
+
+    done();
+  });
+
 });

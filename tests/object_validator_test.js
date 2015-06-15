@@ -118,4 +118,53 @@ describe('ObjectValidator - validates objects', function() {
     done();
   });
 
+  it('Extends object', function(done) {
+    var extensionSchema = Duns.object().extend({
+      is42: function(val, param) {
+        return val.test === 42;
+      }
+    }).keys({
+      test: Duns.number()
+    });
+
+    should(extensionSchema.is42().validate({
+      test: 42,
+    })).be.true;
+
+    done();
+  });
+
+  it('required() forces values to exist', function(done) {
+    var Schema = Duns.object().keys({
+      test: Duns.string().required(),
+    });
+    should(Schema.validate({ test: 'test' })).be.true;
+    should(Schema.validate({ testelse: 'test' })).be.false;
+    done();
+  });
+
+  it('optional() allows values to not be entered', function(done) {
+    var Schema = Duns.object().keys({
+      test: Duns.string(),
+      opt: Duns.string().optional(),
+    });
+
+    should(Schema.validate({ test: 'test' })).be.true;
+    should(Schema.validate({ test: 'test', opt: 'test', })).be.true;
+    should(Schema.validate({ opt: 'test' })).be.false;
+    should(Schema.validate({})).be.false;
+    done();
+  });
+
+  it('forbidden() forces values to be undefined', function(done) {
+    var Schema = Duns.object().keys({
+      test: Duns.string(),
+      opt: Duns.string().forbidden(),
+    });
+
+    should(Schema.validate({ test: 'test' })).be.true;
+    should(Schema.validate({ test: 'test', opt: 'test', })).be.false;
+    done();
+  });
+
 });

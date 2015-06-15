@@ -12,6 +12,51 @@ describe('Duns - Any Validator', function() {
     done();
   });
 
+  describe('Extensions', function() {
+    it('Extends any', function(done) {
+      var extensionSchema = Duns.any().extend({
+        is42: function(val) {
+          return val === 42;
+        }
+      });
+
+      should(extensionSchema.is42().validate(42)).be.true;
+      should(extensionSchema.is42().validate(100)).be.false;
+
+      done();
+    });
+
+    it('Returns constraints to extended method', function(done) {
+      var extensionSchema = Duns.any().extend({
+        isBetween: function(val, min, max) {
+          return val < max && val > min;
+        }
+      });
+
+      should(extensionSchema.isBetween(50, 100).validate(60)).be.true;
+      should(extensionSchema.isBetween(50, 100).validate(40)).be.false;
+      should(extensionSchema.isBetween(50, 100).validate(110)).be.false;
+
+      done();
+    });
+
+    it('Extensions are per schema basis', function(done) {
+      var extensionSchema = Duns.any().extend({
+        is42: function(val) {
+          return val === 42;
+        }
+      });
+
+      should(extensionSchema.is42().validate(42)).be.true;
+
+      var cleanSchema = Duns.any();
+      should(cleanSchema.is42).be.undefined;
+
+      done();
+    });
+
+  })
+
   it('Uses shorthand notation', function(done) {
     should(Duns.any(100).validate()).be.true;
     done();

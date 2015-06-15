@@ -142,4 +142,17 @@ describe('Arrayvalidator - validates array objects', function() {
 
     done();
   });
+
+  it('Extends array', function(done) {
+    var extensionSchema = Duns.array().extend({
+      is42: function(val) {
+        return val[0] === 42;
+      }
+    });
+
+    should(extensionSchema.is42().validate([42])).be.true;
+    should(extensionSchema.is42().validate([100])).be.false;
+
+    done();
+  });
 });

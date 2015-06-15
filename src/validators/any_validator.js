@@ -1,11 +1,54 @@
 import _ from 'underscore';
 
+const existConstraints = {
+  isRequired: 1,
+  isOptional: 2,
+  isForbidden: 3,
+};
+
 class AnyValidator {
   constructor(val) {
     this.type = 'Duns-any-validator';
     this._clear();
 
     this.value = val;
+
+    this._setupBaseSchema();
+  }
+
+  _setupBaseSchema() {
+
+    // Generic extensions for all schemas.
+    this.extensions = {};
+
+    this._settings = {
+      required: existConstraints.isRequired,
+    };
+  }
+
+  _isOptional() {
+    return this._settings.required === existConstraints.isOptional;
+  }
+  _isRequired() {
+    return this._settings.required === existConstraints.isRequired;
+  }
+  _isForbidden() {
+    return this._settings.required === existConstraints.isForbidden;
+  }
+
+  required() {
+    this._settings.required = existConstraints.isRequired;
+    return this;
+  }
+
+  optional() {
+    this._settings.required = existConstraints.isOptional;
+    return this;
+  }
+
+  forbidden() {
+    this._settings.required = existConstraints.isForbidden;
+    return this;
   }
 
   _clear() {
@@ -31,6 +74,31 @@ class AnyValidator {
     if (_(cb).isFunction()) {
       this.props.custom.push(cb);
     }
+
+    return this;
+  }
+
+  /**
+  * Extends schema with custom function.
+  *
+  * @param Object with custom methods.
+  * @author Niklas Silfverström<niklas@silfverstrom.com>
+  * @since 1.0.0
+  * @version 1.0.0
+  */
+  extend(extensions) {
+    if (_(extensions).isObject() === false) return this;
+
+    _(extensions).mapObject((func, key) => {
+
+      // Do not override existing.
+      if (this[key] === undefined) {
+        this[key] = (...param) => {
+          this.extensions[key] = { func: func, param: param, };
+          return this;
+        }
+      }
+    });
 
     return this;
   }
@@ -94,6 +162,18 @@ class AnyValidator {
   validate(arg) {
     const param = (arg === undefined) ? this.value : arg;
     const props = this.props;
+
+    // Check custom functions
+    try {
+      _(this.extensions).mapObject((obj, key) => {
+        const func   = obj.func;
+        if (!func.apply(this, [param].concat(obj.param))) {
+          throw 'Failed';
+        }
+      });
+    } catch (err) {
+      return this.fail(err);
+    }
 
     //Always allow whitelist values
     if (props.allow && _(props.allow).contains(param)) return true;
