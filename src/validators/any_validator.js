@@ -49,7 +49,10 @@ class AnyValidator {
 
       // Do not override existing.
       if (this[key] === undefined) {
-        this[key] = func;
+        this[key] = (...param) => {
+          console.log('param is', param);
+          return func.apply(this, param);
+        }
       }
     });
 
