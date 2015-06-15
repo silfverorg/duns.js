@@ -8,6 +8,27 @@ describe('Arrayvalidator - validates array objects', function() {
     done();
   });
 
+  it('Adds custom method', function(done) {
+    should(Duns.array([100]).custom(function(val) {
+      return true;
+    }).validate()).be.true;
+
+    should(Duns.array([100]).custom(function(val) {
+      return false;
+    }).validate()).be.false;
+
+    should(Duns.array(100).custom(function(val) {
+      return true;
+    }).validate()).be.false;
+
+    done();
+  });
+
+  it('Returns false on no value', function(done) {
+    (Duns.array().validate()).should.be.false;
+    done();
+  });
+
   it('Validates max', function(done) {
     should(Duns.array([100]).max(1).validate()).be.true;
     should(Duns.array([
@@ -118,6 +139,19 @@ describe('Arrayvalidator - validates array objects', function() {
       200,
       400,
     ], 'returns each item times two.');
+
+    done();
+  });
+
+  it('Extends array', function(done) {
+    var extensionSchema = Duns.array().extend({
+      is42: function(val) {
+        return val[0] === 42;
+      }
+    });
+
+    should(extensionSchema.is42([42])).be.true;
+    should(extensionSchema.is42([100])).be.false;
 
     done();
   });

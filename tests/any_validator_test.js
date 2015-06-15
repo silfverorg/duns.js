@@ -7,8 +7,61 @@ describe('Duns - Any Validator', function() {
     should(Duns.validate('test', Duns.any())).be.true;
   });
 
+  it('Returns false on no value', function(done) {
+    (Duns.any().validate()).should.be.false;
+    done();
+  });
+
+  describe('Extensions', function() {
+    it('Extends any', function(done) {
+      var extensionSchema = Duns.any().extend({
+        is42: function(val) {
+          return val === 42;
+        }
+      });
+
+      should(extensionSchema.is42(42)).be.true;
+      should(extensionSchema.is42(100)).be.false;
+
+      done();
+    });
+
+    it('Extensions are per schema basis', function(done) {
+      var extensionSchema = Duns.any().extend({
+        is42: function(val) {
+          return val === 42;
+        }
+      });
+
+      should(extensionSchema.is42(42)).be.true;
+
+      var cleanSchema = Duns.any();
+      should(cleanSchema.is42).be.undefined;
+
+      done();
+    });
+
+  })
+
+  it('Uses shorthand notation', function(done) {
+    should(Duns.any(100).validate()).be.true;
+    done();
+  });
+
   it('Should throw on assert', function(done) {
     (Duns.any(undefined).assert).should.throw();
+    done();
+  });
+
+  it('Adds custom method', function(done) {
+    should(Duns.any(100).custom(function(val) {
+      return true;
+    }).validate()).be.true;
+
+    should(Duns.any(100).custom(function(val) {
+      return false;
+    }).validate()).be.false;
+
     done();
   });
 

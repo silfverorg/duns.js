@@ -11,15 +11,17 @@ class ObjectValidator extends AnyValidator {
   _clear() {
     this.props = {
       nested: {},
+      custom: [],
     };
     return this;
   }
 
   validate(arg) {
+    if (!super.validate(arg)) return false;
     let param = arg || this.value;
 
     if (_(param).isObject() === false) {
-      throw new Error('Not a valid object');
+      return this.fail('Not a valid object');
     }
 
     try {

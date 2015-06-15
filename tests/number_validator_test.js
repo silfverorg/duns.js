@@ -11,6 +11,23 @@ describe('NumberValidator - validates numbers', function() {
     done();
   });
 
+  it('Adds custom method', function(done) {
+    should(Duns.number(100).custom(function(val) {
+      return true;
+    }).validate()).be.true;
+
+    should(Duns.number(100).custom(function(val) {
+      return false;
+    }).validate()).be.false;
+
+    done();
+  });
+
+  it('Returns false on no value', function(done) {
+    (Duns.number().validate()).should.be.false;
+    done();
+  });
+
   it('Should throw on assert', function(done) {
     (Duns.number('100').assert).should.throw();
     done();
@@ -81,6 +98,19 @@ describe('NumberValidator - validates numbers', function() {
   it('validates negative', function(done) {
     should(Duns.number(-100).negative().validate()).be.true;
     should(Duns.number(100).negative().validate()).be.false;
+    done();
+  });
+
+  it('Extends number', function(done) {
+    var extensionSchema = Duns.number().extend({
+      is42: function(val) {
+        return val === 42;
+      }
+    });
+
+    should(extensionSchema.is42(42)).be.true;
+    should(extensionSchema.is42(100)).be.false;
+
     done();
   });
 

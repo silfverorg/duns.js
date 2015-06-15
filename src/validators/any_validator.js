@@ -16,6 +16,7 @@ class AnyValidator {
       disallow: null,
       allow: null,
       oneOf: null,
+      custom: [],
     };
     return this;
   }
@@ -23,6 +24,36 @@ class AnyValidator {
   fail(err) {
     this.failure = err;
     return false;
+  }
+
+  custom(cb) {
+    if (_(cb).isFunction()) {
+      this.props.custom.push(cb);
+    }
+
+    return this;
+  }
+
+  /**
+  * Extends schema with custom function.
+  *
+  * @param Object with custom methods.
+  * @author Niklas Silfverström<niklas@silfverstrom.com>
+  * @since 1.0.0
+  * @version 1.0.0
+  */
+  extend(extensions) {
+    if (_(extensions).isObject() === false) return this;
+
+    _(extensions).mapObject((func, key) => {
+
+      // Do not override existing.
+      if (this[key] === undefined) {
+        this[key] = func;
+      }
+    });
+
+    return this;
   }
 
   oneOf(...args) {
@@ -80,7 +111,8 @@ class AnyValidator {
     return this.value;
   }
 
-  validate(param) {
+  validate(arg) {
+    const param = (arg === undefined) ? this.value : arg;
     const props = this.props;
 
     //Always allow whitelist values
@@ -90,6 +122,14 @@ class AnyValidator {
 
     if (props.disallow && _(props.disallow).contains(param)) {
       return this.fail('Value is blacklisted');
+    }
+
+    if (props.custom && props.custom.length > 0) {
+      for (let i = 0; i < props.custom.length; i++) {
+        const cb = props.custom[i];
+        const res = cb(param);
+        if (!res) return this.fail('cb not validated');
+      }
     }
 
     if (props.oneOf && _(props.oneOf).isArray()) {

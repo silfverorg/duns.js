@@ -26,6 +26,27 @@ describe('ObjectValidator - validates objects', function() {
     done();
   });
 
+  it('Returns false on no value', function(done) {
+    (Duns.object().validate()).should.be.false;
+    done();
+  });
+
+  it('Adds custom method', function(done) {
+    should(Duns.object({}).custom(function(val) {
+      return true;
+    }).validate()).be.true;
+
+    should(Duns.object({}).custom(function(val) {
+      return false;
+    }).validate()).be.false;
+
+    should(Duns.object(100).custom(function(val) {
+      return true;
+    }).validate()).be.false;
+
+    done();
+  });
+
   it('Should throw on assert', function(done) {
     (Duns.object(100).assert).should.throw();
     done();
@@ -76,6 +97,20 @@ describe('ObjectValidator - validates objects', function() {
         400,
       ],
     }, 'Returns all values formatted');
+
+    done();
+  });
+
+  it('Extends object', function(done) {
+    var extensionSchema = Duns.object().extend({
+      is42: function(val) {
+        return val.test === 42;
+      }
+    });
+
+    should(extensionSchema.is42({
+      test: 42,
+    })).be.true;
 
     done();
   });
