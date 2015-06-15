@@ -1,5 +1,11 @@
 import _ from 'underscore';
 
+const existConstraints = {
+  isRequired: 1,
+  isOptional: 2,
+  isForbidden: 3,
+};
+
 class AnyValidator {
   constructor(val) {
     this.type = 'Duns-any-validator';
@@ -7,8 +13,42 @@ class AnyValidator {
 
     this.value = val;
 
+    this._setupBaseSchema();
+  }
+
+  _setupBaseSchema() {
+
     // Generic extensions for all schemas.
     this.extensions = {};
+
+    this._settings = {
+      required: existConstraints.isRequired,
+    };
+  }
+
+  _isOptional() {
+    return this._settings.required === existConstraints.isOptional;
+  }
+  _isRequired() {
+    return this._settings.required === existConstraints.isRequired;
+  }
+  _isForbidden() {
+    return this._settings.required === existConstraints.isForbidden;
+  }
+
+  required() {
+    this._settings.required = existConstraints.isRequired;
+    return this;
+  }
+
+  optional() {
+    this._settings.required = existConstraints.isOptional;
+    return this;
+  }
+
+  forbidden() {
+    this._settings.required = existConstraints.isForbidden;
+    return this;
   }
 
   _clear() {

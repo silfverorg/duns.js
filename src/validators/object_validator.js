@@ -25,9 +25,14 @@ class ObjectValidator extends AnyValidator {
     }
 
     try {
-      _(param).mapObject((value, key) => {
-        const schema = this.props.nested[key];
-        if (!schema) throw 'key does not exist';
+      _(this.props.nested).mapObject((schema, key) => {
+        const value = param[key];
+
+        if (value === undefined && schema && schema._isForbidden()) return true;
+        if (value !== undefined && schema && schema._isForbidden()) throw 'Forbidden value';
+
+        if (value === undefined && schema && schema._isOptional()) return true;
+        if (!schema && schema._isRequired()) throw 'key does not exist';
         if (!schema.validate(value)) throw 'Not valid';
       });
     } catch (err) {
