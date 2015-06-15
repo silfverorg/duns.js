@@ -101,4 +101,18 @@ describe('ObjectValidator - validates objects', function() {
     done();
   });
 
+  it('Extends object', function(done) {
+    var extensionSchema = Duns.object().extend({
+      is42: function(val) {
+        return val.test === 42;
+      }
+    });
+
+    should(extensionSchema.is42({
+      test: 42,
+    })).be.true;
+
+    done();
+  });
+
 });

@@ -122,4 +122,17 @@ describe('Duns - Date Validator', function() {
 
   });
 
+  it('Extends date', function(done) {
+    var extensionSchema = Duns.date().extend({
+      is42: function(val) {
+        return val === 42;
+      }
+    });
+
+    should(extensionSchema.is42(42)).be.true;
+    should(extensionSchema.is42(100)).be.false;
+
+    done();
+  });
+
 });

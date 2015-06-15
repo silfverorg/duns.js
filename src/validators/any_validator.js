@@ -34,6 +34,28 @@ class AnyValidator {
     return this;
   }
 
+  /**
+  * Extends schema with custom function.
+  *
+  * @param Object with custom methods.
+  * @author Niklas Silfverström<niklas@silfverstrom.com>
+  * @since 1.0.0
+  * @version 1.0.0
+  */
+  extend(extensions) {
+    if (_(extensions).isObject() === false) return this;
+
+    _(extensions).mapObject((func, key) => {
+
+      // Do not override existing.
+      if (this[key] === undefined) {
+        this[key] = func;
+      }
+    });
+
+    return this;
+  }
+
   oneOf(...args) {
     this.props.oneOf = [];
     if (args.length) {
