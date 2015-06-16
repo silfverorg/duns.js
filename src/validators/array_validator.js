@@ -82,14 +82,6 @@ class ArrayValidator extends AnyValidator {
     return true;
   }
 
-  format() {
-    if (_(this.formattFunc).isFunction()) {
-      return _(this.value).map((item) => this.formattFunc(item));
-    }
-
-    return this.value;
-  }
-
 }
 
 export default ArrayValidator;

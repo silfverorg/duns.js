@@ -29,9 +29,11 @@ class AnyValidator {
   _isOptional() {
     return this._settings.required === existConstraints.isOptional;
   }
+
   _isRequired() {
     return this._settings.required === existConstraints.isRequired;
   }
+
   _isForbidden() {
     return this._settings.required === existConstraints.isForbidden;
   }

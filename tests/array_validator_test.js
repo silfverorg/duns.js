@@ -1,5 +1,6 @@
 var Duns   = require('../index');
 var should = require('should');
+var _      = require('underscore');
 
 describe('Arrayvalidator - validates array objects', function() {
   it('Validates min', function(done) {
@@ -129,8 +130,10 @@ describe('Arrayvalidator - validates array objects', function() {
       100,
       200,
     ];
-    var Schema = Duns.array().returns(function(item) {
-      return item * 2;
+    var Schema = Duns.array().returns(function(array) {
+      return _(array).map(function(val) {
+        return val * 2;
+      });
     }).init(it);
 
     var val = Schema.format();
