@@ -1,5 +1,6 @@
 var Duns   = require('../index');
 var should = require('should');
+var _      = require('underscore');
 
 describe('ObjectValidator - validates objects', function() {
   it('Validates objects', function(done) {
@@ -89,8 +90,10 @@ describe('ObjectValidator - validates objects', function() {
         return val + '!!';
       }),
 
-      items: Duns.array().returns(function(val) {
-        return val * 2;
+      items: Duns.array().returns(function(arr) {
+        return _(arr).map(function(val) {
+          return val * 2;
+        });
       }),
     });
 
