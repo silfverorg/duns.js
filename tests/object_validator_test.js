@@ -230,4 +230,14 @@ describe('ObjectValidator - validates objects', function() {
     done();
   });
 
+  it('Validates a zero number', function() {
+    var Schema = Duns.object().keys({
+      num: Duns.number().required(),
+    });
+
+    Schema.validate({
+      num: 0,
+    }).should.be.true;
+  });
+
 });
