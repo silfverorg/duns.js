@@ -89,7 +89,7 @@ class StringValidator extends AnyValidator {
   */
   validate(arg) {
     if (!super.validate(arg)) return false;
-    const param = arg || this.value;
+    const param = (arg !== undefined) ? arg : this.value;
     const props = this.props;
 
     if (_(param).isString() === false) {

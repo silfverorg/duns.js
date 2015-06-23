@@ -41,7 +41,7 @@ class ArrayValidator extends AnyValidator {
 
   validate(arg) {
     if (!super.validate(arg)) return false;
-    let param = arg || this.value;
+    let param = (arg === undefined) ? this.value : arg;
     const props = this.props;
     if (_(param).isArray() == false) {
       return this.fail('Not array');

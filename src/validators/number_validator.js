@@ -60,8 +60,9 @@ class NumberValidator extends AnyValidator {
 
   validate(arg) {
     if (!super.validate(arg)) return false;
-    var param = arg || this.value;
-    if (_(param).isNumber() == false) {
+    var param = (arg !== undefined) ? arg : this.value;
+
+    if (_(param).isNumber() === false) {
       return this.fail('Not number');
     }
 
