@@ -225,7 +225,7 @@ class AnyValidator {
   * @version 1.0.0
   */
   assert(param) {
-    if (!this.validate()) {
+    if (!this.validate(param)) {
       throw new Error('Did not validate');
     }
 

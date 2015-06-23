@@ -67,6 +67,11 @@ describe('Duns - Any Validator', function() {
     done();
   });
 
+  it('Returns true on assert', function() {
+    (Duns.any().assert(100)).should.be.true;
+    (Duns.any().init(100).assert()).should.be.true;
+  });
+
   it('Adds custom method', function(done) {
     should(Duns.any(100).custom(function(val) {
       return true;
