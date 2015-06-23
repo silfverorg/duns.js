@@ -114,4 +114,9 @@ describe('NumberValidator - validates numbers', function() {
     done();
   });
 
+  it('Validates zero', function() {
+    var Schema = Duns.number().required();
+    Schema.validate(0).should.be.true;
+  });
+
 });
