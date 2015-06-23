@@ -49,6 +49,52 @@ describe('ObjectValidator - validates objects', function() {
     done();
   });
 
+  it('Validates and formats nested numbers', function(done) {
+    var schema = Duns.object().keys({
+      test: Duns.number(),
+      nested: Duns.object().keys({
+        test2: Duns.number(),
+      }),
+    });
+
+    should(schema.init({
+      test: 100,
+      nested: {
+        test2: 100
+      },
+    }).validate()).be.true;
+
+    should(schema.init({
+      test: 100,
+      nested: {
+        test2: 0,
+      },
+    }).validate()).be.true;
+
+    should(schema.init({
+      test: 0,
+      nested: {
+        test2: 100,
+      },
+    }).validate()).be.true;
+
+    should(schema.init({
+      test: 100,
+      nested: {
+        test2: '100',
+      },
+    }).validate()).be.false;
+
+    should(schema.init({
+      test: '100',
+      nested: {
+        test2: 100
+      },
+    }).validate()).be.false;
+
+    done();
+  });
+
   it('Adds custom method', function(done) {
     should(Duns.object({}).custom(function(val) {
       return true;
@@ -135,6 +181,20 @@ describe('ObjectValidator - validates objects', function() {
     })).be.true;
 
     done();
+  });
+
+  it('Does not allow unspecified values', function() {
+    var schema = Duns.object().keys({
+      test: Duns.any(),
+    });
+
+    should(schema.init({ test: 100 }).validate()).be.true;
+
+    should(schema.init({
+      test: 100,
+      test2: 200,
+    }).validate()).be.false;
+
   });
 
   it('required() forces values to exist', function(done) {

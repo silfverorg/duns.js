@@ -18,7 +18,7 @@ class ObjectValidator extends AnyValidator {
 
   validate(arg) {
     if (!super.validate(arg)) return false;
-    let param = arg || this.value;
+    let param = (arg === undefined) ? this.value : arg;
 
     if (_(param).isObject() === false) {
       return this.fail('Not a valid object');
@@ -35,6 +35,9 @@ class ObjectValidator extends AnyValidator {
         if (!schema && schema._isRequired()) throw 'key does not exist';
         if (!schema.validate(value)) throw 'Not valid';
       });
+
+      // Check if invalid keys exist in object.
+      if(_.difference(_(param).keys(), _(this.props.nested).keys()).length !== 0) throw 'Invalid values in object';
     } catch (err) {
       return this.fail(err);
     }
