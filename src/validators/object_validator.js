@@ -37,7 +37,7 @@ class ObjectValidator extends AnyValidator {
       });
 
       // Check if invalid keys exist in object.
-      if(_.difference(_(param).keys(), _(this.props.nested).keys()).length !== 0) throw 'Invalid values in object';
+      if (_.difference(_(param).keys(), _(this.props.nested).keys()).length !== 0) throw 'Invalid values in object';
     } catch (err) {
       return this.fail(err);
     }
