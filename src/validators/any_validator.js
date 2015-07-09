@@ -153,9 +153,10 @@ class AnyValidator {
     return this;
   }
 
-  format() {
+  format(arg) {
+    const value = (arg === undefined) ? this.value : arg;
     if (_(this.formattFunc).isFunction()) {
-      return this.formattFunc(this.value, this.siblings);
+      return this.formattFunc(value, this.siblings);
     }
 
     return this.value;

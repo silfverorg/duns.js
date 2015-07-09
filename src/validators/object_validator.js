@@ -53,11 +53,13 @@ class ObjectValidator extends AnyValidator {
     return this;
   }
 
-  format() {
+  format(arg) {
+    const value = (arg === undefined) ? this.value : arg;
+
     return _(this.props.nested).mapObject((schema, key) => {
-      const val = this.value[key];
+      const val = value[key];
       if (!schema) return val;
-      return _(schema.format).isFunction() ? schema.init(val, this.value).format() : val;
+      return _(schema.format).isFunction() ? schema.init(val, value).format() : val;
     });
   }
 }
