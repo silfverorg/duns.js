@@ -32,6 +32,20 @@ describe('ObjectValidator - validates objects', function() {
     done();
   });
 
+  it('formats with arg', function(done) {
+    (Duns.object({ test: 100 }).format());
+
+    var schema = Duns.object().keys({
+      test: Duns.number().returns(function(num) {
+        return num * 2;
+      })
+    });
+
+    should(schema.format({ test: 10}).test).eql(20);
+
+    done();
+  });
+
   it('Formats schemas with vals that does not exist', function(done) {
     var schema = Duns.object({ test: 100})
     .keys({

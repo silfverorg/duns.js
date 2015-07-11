@@ -132,4 +132,14 @@ describe('Duns - Any Validator', function() {
     should(Duns.validate('10', schema)).be.false;
   });
 
+  it('Can format value', function() {
+    var schema = Duns.any().returns(function(val) {
+      return val * 2;
+    });
+
+    should(schema.init(5).format(10)).be.eql(20);
+    should(schema.format(20)).be.eql(40);
+
+  });
+
 });
