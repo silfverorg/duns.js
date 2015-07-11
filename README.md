@@ -121,6 +121,7 @@ Must be array. Extends Duns.any.
 ### Duns.object
 Must be object. Extends Duns.any.
 * keys() - creates a nested schema, where each key must be a schema.
+* allowAllKeys() - Allows none defined keys to exist in object.
 * returns(callback) - Defines a callback to be executed on 'format()'. Values will be set to what callback returns.
     - 'callback' is executed with (val, siblings), where 'siblings' is an object with all siblings.
 

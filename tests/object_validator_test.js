@@ -197,6 +197,20 @@ describe('ObjectValidator - validates objects', function() {
 
   });
 
+  it('Accepts optional keys argument', function() {
+    var schema = Duns.object().keys({
+      shouldExist: Duns.number(),
+    }).allowAllKeys();
+
+    var obj = {
+      shouldExist: 20,
+      test1: 100,
+    };
+
+    should(schema.validate(obj)).eql(true, 'Should not care about optional');
+
+  });
+
   it('required() forces values to exist', function(done) {
     var Schema = Duns.object().keys({
       test: Duns.string().required(),

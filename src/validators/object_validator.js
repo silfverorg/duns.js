@@ -1,6 +1,16 @@
 import _ from 'underscore';
 import AnyValidator from './any_validator';
 
+/**
+* Creates an object schema, that validates a given object.
+*
+* @class
+* @author Niklas Silfverström<niklas@silfverstrom.com>
+* @since 0.1.0
+* @version 1.1.0
+*   1.0.0 - initial.
+*   1.1.0 - Added allowAllKeys.
+*/
 class ObjectValidator extends AnyValidator {
   constructor(value) {
     super(value);
@@ -10,6 +20,7 @@ class ObjectValidator extends AnyValidator {
 
   _clear() {
     this.props = {
+      allowAllKeys: false,
       nested: {},
       custom: [],
     };
@@ -32,12 +43,15 @@ class ObjectValidator extends AnyValidator {
         if (value !== undefined && schema && schema._isForbidden()) throw 'Forbidden value';
 
         if (value === undefined && schema && schema._isOptional()) return true;
-        if (!schema && schema._isRequired()) throw 'key does not exist';
-        if (!schema.validate(value)) throw 'Not valid';
+        if (!schema && schema._isRequired()) throw new Error('key does not exist');
+        if (!schema.validate(value)) throw new Error('Not valid');
       });
 
       // Check if invalid keys exist in object.
-      if (_.difference(_(param).keys(), _(this.props.nested).keys()).length !== 0) throw 'Invalid values in object';
+      if (!this.props.allowAllKeys && _.difference(_(param).keys(),
+        _(this.props.nested).keys()).length !== 0) {
+        throw new Error('Invalid values in object');
+      }
     } catch (err) {
       return this.fail(err);
     }
@@ -50,6 +64,19 @@ class ObjectValidator extends AnyValidator {
       this.props.nested[key] = schema;
     });
 
+    return this;
+  }
+  /**
+  * Allows none defined keys to exist in object.
+  *
+  * Normally, an object schema fails if non specified keys exist in the object.
+  * When using 'allowAllKeys' - schema only looks at specified keys, and ignores all others.
+  * @author Niklas Silfverström<niklas@silfverstrom.com>
+  * @since 1.1.0
+  * @version 1.0.0
+  */
+  allowAllKeys() {
+    this.props.allowAllKeys = true;
     return this;
   }
 
