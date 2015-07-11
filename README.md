@@ -9,6 +9,7 @@ Duns - schema validator for javascript.
 Currently supports the following validators, 
 
 * Duns.any()
+* Duns.bool()
 * Duns.object()
 * Duns.number()
 * Duns.string()
@@ -93,6 +94,13 @@ schema.validate(15) // returns true.
 * returns(callback) - Defines a callback to be executed on 'format()'. Values will be set to what callback returns.
 * format() - Formats schema. Runs all given callbacks, defined with 'returns()' on schema values and returns formatted values. 
     - If no given callback exist, just returns original value.
+
+### Duns.bool
+Must either be true or false. Extends Duns.any.
+
+#### Validation methods
+* mustBeTrue  - forces value to only be === true.
+* mustBeFalse - forces value to only be === false.
 
 ### Duns.number
 Must be number. Extends Duns.any.
