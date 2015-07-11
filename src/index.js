@@ -9,6 +9,7 @@ import ArrayValidator from './validators/array_validator';
 import NumberValidator from './validators/number_validator';
 import DateValidator from './validators/date_validator';
 import AnyValidator from './validators/any_validator';
+import BooleanValidator from './validators/boolean_validator';
 
 class Duns {
   constructor() {
@@ -29,6 +30,10 @@ class Duns {
 
   array(val) {
     return new ArrayValidator(val);
+  }
+
+  bool(val) {
+    return new BooleanValidator(val);
   }
 
   number(val) {

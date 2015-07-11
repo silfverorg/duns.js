@@ -67,7 +67,7 @@ class AnyValidator {
     return this;
   }
 
-  fail(err) {
+  fail(...err) {
     this.failure = err;
     return false;
   }
