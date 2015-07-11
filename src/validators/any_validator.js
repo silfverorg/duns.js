@@ -6,6 +6,16 @@ const existConstraints = {
   isForbidden: 3,
 };
 
+/**
+* Base type for validators.
+*
+* @class
+* @author Niklas Silfverström<niklas@silfverstrom.com>
+* @since 0.1.0
+* @version 1.1.0
+*   1.0.0 - initial.
+*   1.1.0 - added 'invalid' method.
+*/
 class AnyValidator {
   constructor(val) {
     this.type = 'Duns-any-validator';
@@ -220,7 +230,7 @@ class AnyValidator {
   *
   * Exactly like validate, but instead of returning false throws an exception.
   *
-  * @param param optional - parameter to validate.
+  * @param {mixed} param (optional) - value to validate.
   * @author Niklas Silfverström<niklas@silfverstrom.com>
   * @since 1.0.0
   * @version 1.0.0
@@ -231,6 +241,18 @@ class AnyValidator {
     }
 
     return true;
+  }
+
+  /**
+  * Runs validate on schema, but returns true if schema is invalid.
+  *
+  * @param {mixed} param (optional) - value to validate.
+  * @author Niklas Silfverström<niklas@silfverstrom.com>
+  * @since 1.1.0
+  * @version 1.0.0 - initial.
+  */
+  invalid(param) {
+    return !this.validate(param);
   }
 }
 
