@@ -7,9 +7,16 @@ describe('Duns - Any Validator', function() {
     should(Duns.validate('test', Duns.any())).be.true;
   });
 
-  it('Returns false on no value', function(done) {
+  it('Has invalid method', function() {
+    should(Duns.any().invalid(null)).be.true;
+    should(Duns.any().invalid(undefined)).be.true;
+
+    should(Duns.any().invalid(10)).be.false;
+    should(Duns.any().invalid('10')).be.false;
+  });
+
+  it('Returns false on no value', function() {
     (Duns.any().validate()).should.be.false;
-    done();
   });
 
   describe('Extensions', function() {

@@ -67,6 +67,7 @@ Duns can also assist in formatting values given a schema.
 
 #### Validation methods
 * validate(value) - Validates 'value' against schema. Returns true or false.
+* invalid(value) - Validates 'value' against schema but returns true if schema could not be validated.
 * assert(value) - Like validate, but throws if validation fails.
 * oneOf(schema[]) - Accepts one or more schemas - that must validate.
 * disallow(value) - Disallows exact 'value' in schema.
