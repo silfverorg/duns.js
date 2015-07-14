@@ -77,6 +77,18 @@ class Duns {
     return false;
   }
 
+  assert(object, schema) {
+    if (schema && _(schema.assert).isFunction()) {
+      return schema.assert(object);
+    }
+  }
+
+  invalid(object, schema) {
+    if (schema && _(schema.invalid).isFunction()) {
+      return schema.invalid(object);
+    }
+  }
+
 }
 
 export default new Duns();

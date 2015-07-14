@@ -19,6 +19,23 @@ describe('Duns - Any Validator', function() {
     (Duns.any().validate()).should.be.false;
   });
 
+  it('Duns main object has assert, validate and invalid method', function(done) {
+    var schema = Duns.any();
+    should(Duns.validate(100, schema)).be.true;
+    should(Duns.assert(100, schema)).be.true;
+    should(Duns.invalid(100, schema)).be.false;
+    should(Duns.invalid(null, schema)).be.true;
+    try {
+      should(Duns.assert(null, schema)).be.true;
+      done(new Error('Did not assert'));
+    } catch (err) {
+      // All is good
+    }
+
+    done();
+
+  });
+
   describe('Extensions', function() {
     it('Extends any', function(done) {
       var extensionSchema = Duns.any().extend({
