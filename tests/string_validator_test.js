@@ -38,22 +38,35 @@ describe('Stringvalidator - validates string objects', function() {
     done();
   });
 
-  it('Validates string().oneOf', function(done) {
+  describe('Can validate oneOf', function() {
+    it('Validates string().oneOf', function(done) {
 
-    //Test valid cases
-    should(Duns.validate('test1',
-        Duns.string().oneOf('test1', 'test2')
-    )).be.eql(true, 'should match test1');
-    should(Duns.validate('test2',
-        Duns.string().oneOf('test1', 'test2')
-    )).be.eql(true, 'should match test2');
+      //Test valid cases
+      should(Duns.validate('test1',
+          Duns.string().oneOf('test1', 'test2')
+      )).be.eql(true, 'should match test1');
+      should(Duns.validate('test2',
+          Duns.string().oneOf('test1', 'test2')
+      )).be.eql(true, 'should match test2');
 
-    //Test invalid valid cases
-    should(Duns.validate('nomatch',
-        Duns.string().oneOf('test1', 'test2')
-    )).be.eql(false, 'should not match any case');
+      //Test invalid valid cases
+      should(Duns.validate('nomatch',
+          Duns.string().oneOf('test1', 'test2')
+      )).be.eql(false, 'should not match any case');
 
-    done();
+      done();
+    });
+
+    it('Handles arrays correctly', function() {
+      var schema = Duns.string().oneOf([
+        '1', '2', '3',
+      ]);
+      should(schema.validate('1')).be.true;
+
+      should(schema.validate(1)).be.false;
+      should(schema.validate('somethingelse')).be.false;
+    });
+
   });
 
   it('Validates format for strings', function(done) {

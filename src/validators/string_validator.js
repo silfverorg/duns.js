@@ -30,7 +30,7 @@ class StringValidator extends AnyValidator {
     if (args.length) {
       _(args).map((arg) => {
         if (_(arg).isArray()) {
-          this.props.oneOfString.concat(arg);
+          this.props.oneOfString = this.props.oneOfString.concat(arg);
         } else {
           this.props.oneOfString.push(arg);
         }
