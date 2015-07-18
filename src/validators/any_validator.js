@@ -12,7 +12,7 @@ const existConstraints = {
 * @class
 * @author Niklas Silfverström<niklas@silfverstrom.com>
 * @since 0.1.0
-* @version 1.1.0
+* @version 1.2.0
 *   1.0.0 - initial.
 *   1.1.0 - added 'invalid' method.
 */
@@ -72,6 +72,7 @@ class AnyValidator {
       disallow: null,
       allow: null,
       oneOf: null,
+      only: null,
       custom: [],
     };
     return this;
@@ -115,17 +116,53 @@ class AnyValidator {
     return this;
   }
 
+  /**
+   * Validates with one of schema
+   *
+   * @name oneOf
+   * @function
+   * @author Viktor Silfverstrom <viktor@silfverstrom.com>
+   * @version 1.0.1 - Fixed an issue with arrays not concating correctly.
+   * @access public
+   * @return {AnyValidator}
+   */
   oneOf(...args) {
     this.props.oneOf = [];
     if (args.length) {
       _(args).map((arg) => {
         if (_(arg).isArray()) {
-          this.props.oneOf.concat(arg);
+          this.props.oneOf = this.props.oneOf.concat(arg);
         } else {
           this.props.oneOf.push(arg);
         }
       });
 
+    }
+
+    return this;
+  }
+
+  /**
+   * Validates with one of values.
+   *
+   * @name only
+   * @function
+   * @author Viktor Silfverstrom <viktor@silfverstrom.com>
+   * @version 1.0.0
+   * @since 1.2.0
+   * @access public
+   * @return {AnyValidator}
+   */
+  only(...args) {
+    this.props.only = [];
+    if (args.length) {
+      _(args).each((arg) => {
+        if (_(arg).isArray()) {
+          this.props.only = this.props.only.concat(arg);
+        } else {
+          this.props.only.push(arg);
+        }
+      });
     }
 
     return this;
@@ -191,6 +228,19 @@ class AnyValidator {
     //Always allow whitelist values
     if (props.allow && _(props.allow).contains(param)) return true;
 
+    //Check if there have been specified an only prop.
+    //If there has, we can safely assume that this check will be sufficent.
+    //This has to be done before the null || undefined check to allow those values.
+    if (props.only && _(props.only).isArray()) {
+      const onlyValid = _(props.only).any((num) => {
+        return arg === num;
+      });
+
+      if (!onlyValid) return this.fail('only did not validate');
+      return onlyValid;
+    }
+
+    //Return false for null or undefined value.
     if (param === null || param === undefined) return false;
 
     if (props.disallow && _(props.disallow).contains(param)) {

@@ -156,6 +156,21 @@ describe('Duns - Any Validator', function() {
     should(Duns.validate('10', schema)).be.false;
   });
 
+  it('Accepts multiple oneOf', function() {
+    var schema = Duns.any().oneOf([
+      Duns.number().only(1337),
+      Duns.string().only('1337'),
+    ]);
+
+    Duns.validate('1337', schema).should.be.true;
+    schema.validate(1337).should.be.true;
+
+    schema.validate(true).should.be.false;
+    schema.validate(false).should.be.false;
+    schema.validate('133').should.be.false;
+    schema.validate(133).should.be.false;
+  });
+
   it('Can format value', function() {
     var schema = Duns.any().returns(function(val) {
       return val * 2;
@@ -164,6 +179,34 @@ describe('Duns - Any Validator', function() {
     should(schema.init(5).format(10)).be.eql(20);
     should(schema.format(20)).be.eql(40);
 
+  });
+
+  it('Can validate only', function() {
+    var schema = Duns.any().only(null);
+    Duns.validate(null, schema).should.be.true;
+    Duns.validate(undefined, schema).should.be.false;
+    Duns.validate(1, schema).should.be.false;
+    Duns.validate(true, schema).should.be.false;
+    Duns.validate(false, schema).should.be.false;
+    Duns.validate('true', schema).should.be.false;
+  });
+
+  it('Can validate multiple only', function() {
+    var schema = Duns.any().only('1337', 1337);
+    schema.validate(1337).should.be.true;
+    schema.validate('1337').should.be.true;
+    schema.validate(undefined).should.be.false;
+    schema.validate(null).should.be.false;
+    schema.validate('1336').should.be.false;
+    schema.validate(true).should.be.false;
+    schema.validate(false).should.be.false;
+  });
+
+  it('Can validate undefined only value', function() {
+    var schema = Duns.any().only(undefined);
+    schema.validate(undefined).should.be.true;
+    schema.validate(null).should.be.false;
+    schema.validate(true).should.be.false;
   });
 
 });
