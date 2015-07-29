@@ -120,6 +120,7 @@ Must be string. Extends Duns.any.
 * length(le)   - lenght must be exactly === le.
 * email(email) - must be RFC822 valid email.
 * oneOf()      - Must match one of arguments. For instance, Duns.string().oneOf('test1','test2') creates a schema that must match either 'test1' or 'test2'.
+* match(RegExp|String) - Will match values with given Regex.
 
 ### Duns.array
 Must be array. Extends Duns.any.
