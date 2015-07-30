@@ -141,6 +141,33 @@ describe('Stringvalidator - validates string objects', function() {
 
   });
 
+  it('Can validate a regex', function() {
+    should(Duns.string('foo').match(/^fo+$/).validate()).be.true;
+
+    should(Duns.string('bar').match(/^fo+$/).validate()).be.false;
+    should(Duns.string('notacat').match(/^cat$/).validate()).be.false;
+    should(Duns.string('notacat').match(/cat$/).validate()).be.true;
+
+    should(Duns.string('foobar').match('foo').validate()).be.true;
+    should(Duns.string('foo').match('').validate()).be.true;
+
+    should(Duns.string('Foo').match('foo').validate()).be.false;
+    should(Duns.string('Foo').match('/foo/i').validate()).be.false;
+    should(Duns.string('Foo').match(/foo/).validate()).be.false;
+    should(Duns.string('Foo').match(/foo/i).validate()).be.true;
+  });
+
+  it('Handles invalid regex values', function() {
+    //These should all be true, since match will not allow the match values.
+    //Making validation only check for typeof string
+    should(Duns.string('foo').match(undefined).validate()).be.true;
+    should(Duns.string('foo').match(null).validate()).be.true;
+    should(Duns.string('foo').match(0).validate()).be.true;
+    should(Duns.string('foo').match(true).validate()).be.true;
+    should(Duns.string('foo').match(false).validate()).be.true;
+
+  });
+
   it('Extends string', function(done) {
     var extensionSchema = Duns.string().extend({
       is42: function(val) {

@@ -20,6 +20,7 @@ class StringValidator extends AnyValidator {
       allowed: [],
       exactLength: null,
       oneOfString: null,
+      match: null,
       custom: [],
     };
     return this;
@@ -81,6 +82,27 @@ class StringValidator extends AnyValidator {
   }
 
   /**
+   * Will match on a regex. Can be an actual regex or a string.
+   *
+   * @name match
+   * @function
+   * @author Viktor Silfverstrom <viktor@silfverstrom.com>
+   * @version 1.0.0
+   * @since 0.1.0
+   * @access public
+   * @example Duns.string('foo').match(/^foo/).validate() // true
+   * @param {Regex|String} regex The regex to match against
+   * @return {StringValidator}
+   */
+  match(regex) {
+    if (_.isRegExp(regex) || _.isString(regex)) {
+      this.props.match = new RegExp(regex);
+    }
+
+    return this;
+  }
+
+  /**
   * Validates param.
   *
   * @author Niklas Silfverström<niklas@silfverstrom.com>
@@ -122,6 +144,10 @@ class StringValidator extends AnyValidator {
 
     if (props.useEmail && isEmail(param) === false) {
       return this.fail('Argument is not valid RFC822 email');
+    }
+
+    if (props.match && props.match.test(param)  === false) {
+      return this.fail('Invalid match for regex');
     }
 
     return true;
