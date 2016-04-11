@@ -38,6 +38,13 @@ Schema.init(data).validate() // Valides as true.
 // Or even like this.
 var schema = Duns.number();
 schema.validate(100); // Validates as true.
+
+// To get failure msg
+var schema = Duns.any().invalid(5);
+if (!schema.validate(5)) {
+  console.log(schema.failure);
+}
+
 ```
 
 Duns can also assist in formatting values given a schema.
