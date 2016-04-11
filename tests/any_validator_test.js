@@ -36,6 +36,12 @@ describe('Duns - Any Validator', function() {
 
   });
 
+  it('Can return failure message', function() {
+    var schema = Duns.any().disallow(5);
+    schema.validate(5).should.be.false;
+    schema.failure.should.be.ok;
+  });
+
   describe('Extensions', function() {
     it('Extends any', function(done) {
       var extensionSchema = Duns.any().extend({
