@@ -73,6 +73,14 @@ describe('Duns - Date Validator', function() {
 
   it('Will accept a valid pattern', function() {
     Duns.validate('20150101', Duns.date().pattern('YYYYMMDD')).should.be.ok;
+    Duns.validate('2015', Duns.date().pattern('YYYY')).should.be.ok;
+    Duns.validate('2015-01', Duns.date().pattern('YYYY-MM')).should.be.ok;
+  });
+
+  it.skip('Will throw on invalid dates provided to pattern', function() {
+    Duns.validate('201501', Duns.date().pattern('YYYY')).should.not.be.ok;
+    Duns.validate('2015', Duns.date().pattern('YYYYMMDD')).should.not.be.ok;
+    Duns.validate('2015-01-01', Duns.date().pattern('YYYYMMDD')).should.not.be.ok;
   });
 
   it('Will throw on invalid formatted date when pattern is not provided', function() {

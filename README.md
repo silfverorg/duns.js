@@ -148,4 +148,5 @@ Must be valid date. Extends Duns.any. Uses moment.js internally.
 * max(max) - Date can't be after max.
 * min(min) - Date can't be before min.
 * pattern(pattern) - Defines what pattern date is in. Used to handle illegal date formats. e.g 'YYYYMMDD'.
+* partial(pattern, value) - Checks a partial value of date. E.g `Duns.validate('2015-01-01', Duns.date().partial('year', 2015)).should.be.ok;`
 * returns(callback/pattern) - Like any.returns, but if param is a pattern, formats date according to pattern.
